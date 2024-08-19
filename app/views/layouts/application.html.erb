@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BlogPost</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+      <%if user_signed_in?%>
+        <h1>Welcome to Online Exam System.... <%= current_user.name.upcase%>!</h1>
+      <%end%>
+     <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+ <nav>
+      <%= link_to 'Home', root_path %>
+      <br>
+      <% if user_signed_in? %>
+        
+        <%= link_to 'Edit Profile', edit_user_registration_path %> <br>
+<%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to logout?' }, class: 'button' %>
+        <% else %>
+
+        <%= link_to 'Sign Up', new_user_registration_path %> <br>
+        <%= link_to 'Login', new_user_session_path %>
+      <% end %>
+    </nav>
+    <%= yield %>
+  </body>
+</html>
+
+
+
+
+
+

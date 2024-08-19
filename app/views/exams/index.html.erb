@@ -1,0 +1,57 @@
+
+<h3>All Exams</h3>
+
+<%if user_signed_in?%>
+  <%if current_user.user_type == 'Teacher' || current_user.user_type == 'teacher'%>
+    <%= link_to 'Create New Exam', new_exam_path %>
+  <%end%>
+
+
+<%end%>
+
+
+
+
+<ul>
+  <% @exams.each do |exam| %>
+    <% case current_user.user_type %>
+      <% when 'admin' %>
+        <li>
+          <%= exam.title %> 
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Approved", style: "color: green;") if exam.approved? %>
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: red;") if exam.cancelled? %>
+        </li>
+
+        <% if !exam.approved %>
+          <%= link_to 'Approve Exam', approve_exam_path(exam), data: {turbo_method: "post"} %>
+        <% end %>
+        <% if !exam.cancelled %>
+          <%= link_to 'Cancel Exam', cancel_exam_path(exam), data:{turbo_method: "post"}  %>
+        <% end %>
+        <%if exam.cancelled?%>
+          <%= link_to  "Delete", exam_path(exam), data:{turbo_method: :delete} %>
+        <%end%>
+        <%= link_to  "Show Exam", exam_path(exam) %>
+      <% when 'teacher' %>
+       <li>
+          <%= exam.title %> 
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Approved", style: "color: green;") if exam.approved? %>
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: red;") if exam.cancelled? %>
+        </li>
+        <%= link_to  "Edit Exam", edit_exam_path(exam) %>
+        <%= link_to  "Show Exam", exam_path(exam) %>
+        <%if !exam.approved%>
+          <%= link_to  "Request Approval", request_approval_exam_path(exam) %>
+        <%end%>
+      <% when 'student' %>
+        <%if !exam.cancelled && exam.active? && exam.approved?%>
+          <li><%= exam.title %></li>
+          <%= link_to 'Take Exam', take_exam_path(exam) %>
+        <% end %>
+    <% end %>
+  <% end %>
+</ul>
+
+<% if user_signed_in? && current_user.user_type == 'Admin' %>
+  <%= link_to 'Create New Exam', new_exam_path %>
+<% end %>

@@ -1,0 +1,8 @@
+<h1>All Exam Outcomes</h1>
+<ul>
+  <% @exam_outcomes.each do |outcome| %>
+    <li>
+      <%= link_to "Exam Outcome for #{outcome.student.name} (#{outcome.exam.title})", exam_outcome_path(outcome) %>
+    </li>
+  <% end %>
+</ul>

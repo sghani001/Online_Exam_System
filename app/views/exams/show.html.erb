@@ -1,0 +1,34 @@
+<h1>Exam Details</h1>
+
+<p>
+  <strong>Title:</strong>
+  <%= @exam.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @exam.description %>
+</p>
+
+<p>
+  <strong>Start Time:</strong>
+  <%= @exam.start_time.strftime("%B %d, %Y %I:%M %p") %>
+</p>
+
+<p>
+  <strong>End Time:</strong>
+  <%= @exam.end_time.strftime("%B %d, %Y %I:%M %p") %>
+</p>
+
+<p>
+  <strong>Approved:</strong>
+  <%= @exam.approved ? "Yes" : "No" %>
+</p>
+
+<p>
+  <strong>Cancelled:</strong>
+  <%= @exam.cancelled ? "Yes" : "No" %>
+</p>
+
+<%= link_to 'Edit Exam', edit_exam_path(@exam) %> |
+<%= link_to 'Back to List', exams_path %>
