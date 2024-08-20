@@ -1,2 +1,20 @@
-<h1>Questions#show</h1>
-<p>Find me in app/views/questions/show.html.erb</p>
+<h3>Question Details</h3>
+<p>
+  <strong>Content:</strong>
+  <%= @question.content %>
+</p>
+<p>
+  <strong>Question Type:</strong>
+  <%= @question.question_type %>
+</p>
+<% if @question.question_type == 'multiple_choice' %>
+  <h4>Options:</h4>
+  <ul>
+    <% @question.options.each_with_index do |(key, value), index| %>
+      <li><strong><%= key %></strong></li>
+    <% end %>
+  </ul>
+<% end %>
+<%= link_to 'Edit Question', edit_exam_question_path(@exam, @question) %> |
+<%= link_to 'Back to Exam', exam_path(@exam) %> |
+<%= link_to  "Delete", exam_question_path(@exam,@question), data:{turbo_method: :delete} %>

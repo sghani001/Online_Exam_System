@@ -1,2 +1,58 @@
-<h1>Questions#new</h1>
-<p>Find me in app/views/questions/new.html.erb</p>
+<%= form_with(model: [@exam, @question], local: true) do |f| %>
+  <div class="field">
+    <%= f.label :content, "Question" %>
+    <%= f.text_area :content %>
+  </div>
+
+  <div class="field">
+    <%= f.label :question_type, "Question Type" %>
+    <%= f.select :question_type, options_for_select([['Multiple Choice', 'multiple_choice'], ['Short Answer', 'short_answer']]) %>
+  </div>
+
+  <div id="multiple-choice-options" style="display: none;">
+    <h4>Options:</h4>
+    <%= f.label :option_1, "Option 1" %>
+    <%= f.text_field :option_1 %><br>
+
+    <%= f.label :option_2, "Option 2" %>
+    <%= f.text_field :option_2 %><br>
+
+    <%= f.label :option_3, "Option 3" %>
+    <%= f.text_field :option_3 %><br>
+  </div>
+
+  <div id="short-answer-field" style="display: none;">
+    <%= f.label :answer, "Answer (for short answer type)" %>
+    <%= f.text_area :answer %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Create Question" %>
+  </div>
+  <div class="actions">
+    <%= link_to  "Back to Exam", exam_path(@exam) %>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const questionTypeSelect = document.querySelector("select[name='question[question_type]']");
+    const multipleChoiceOptions = document.getElementById("multiple-choice-options");
+    const shortAnswerField = document.getElementById("short-answer-field");
+
+    function toggleFields() {
+      if (questionTypeSelect.value === "multiple_choice") {
+        multipleChoiceOptions.style.display = "block";
+        shortAnswerField.style.display = "none";
+      } else if (questionTypeSelect.value === "short_answer") {
+        multipleChoiceOptions.style.display = "none";
+      } else {
+        multipleChoiceOptions.style.display = "none";
+        shortAnswerField.style.display = "none";
+      }
+    }
+
+    questionTypeSelect.addEventListener("change", toggleFields);
+    toggleFields();
+  });
+</script>

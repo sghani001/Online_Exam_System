@@ -1,34 +1,47 @@
 <h1>Exam Details</h1>
-
 <p>
   <strong>Title:</strong>
   <%= @exam.title %>
 </p>
-
 <p>
   <strong>Description:</strong>
   <%= @exam.description %>
 </p>
-
 <p>
   <strong>Start Time:</strong>
   <%= @exam.start_time.strftime("%B %d, %Y %I:%M %p") %>
 </p>
-
 <p>
   <strong>End Time:</strong>
   <%= @exam.end_time.strftime("%B %d, %Y %I:%M %p") %>
 </p>
-
 <p>
   <strong>Approved:</strong>
   <%= @exam.approved ? "Yes" : "No" %>
 </p>
-
 <p>
   <strong>Cancelled:</strong>
   <%= @exam.cancelled ? "Yes" : "No" %>
 </p>
-
-<%= link_to 'Edit Exam', edit_exam_path(@exam) %> |
+<h2>Questions</h2>
+<% if @exam.questions.any? %>
+  <ul>
+    <% @exam.questions.each do |question| %>
+      <li>
+        <%= question.content %> &nbsp &nbsp <%= link_to  "Show Question", exam_question_path(@exam,question) %> | <%= button_to "Delete", exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <% if question.question_type == 'multiple_choice' %>
+          <ul>
+            <% question.options.each_with_index do |(key, value), index| %>
+              <li><strong> <%= key %></strong></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No questions available.</p>
+<% end %>
+<%= link_to "Add Question", new_exam_question_path(@exam) %> |
+<%= link_to 'Edit Exam Details', edit_exam_path(@exam) %> |
 <%= link_to 'Back to List', exams_path %>

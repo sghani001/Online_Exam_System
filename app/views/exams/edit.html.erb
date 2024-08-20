@@ -32,19 +32,12 @@
     <%= form.datetime_select :end_time %>
   </div>
 
-  <div class="field">
-    <%= form.check_box :approved %>
-    <%= form.label :approved %>
-  </div>
-
-  <div class="field">
-    <%= form.check_box :cancelled %>
-    <%= form.label :cancelled %>
-  </div>
 
   <div class="actions">
     <%= form.submit 'Update Exam' %>
   </div>
+
+  
 <% end %>
 
 <%= link_to 'Back', exam_path(@exam) %>

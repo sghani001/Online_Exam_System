@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_19_082422) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_20_064302) do
   create_table "exam_outcomes", force: :cascade do |t|
     t.integer "student_id", null: false
     t.integer "exam_id", null: false
@@ -40,6 +40,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_082422) do
     t.integer "exam_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "options", default: {}
+    t.text "answer"
     t.index ["exam_id"], name: "index_questions_on_exam_id"
   end
 

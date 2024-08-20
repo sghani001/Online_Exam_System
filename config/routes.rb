@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     passwords: 'users/passwords'
   }
+  
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
@@ -17,8 +18,11 @@ Rails.application.routes.draw do
       post 'request_approval'
       get 'take'
     end
+
+    resources :questions
   end
-  
+
+
   resources :exam_outcomes, only: [:index, :show]
   resources :users, only: [:new, :create]
 end
