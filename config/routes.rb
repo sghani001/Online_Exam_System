@@ -16,10 +16,13 @@ Rails.application.routes.draw do
       post 'approve'
       post 'cancel'
       post 'request_approval'
-      get 'take'
+      get 'next_question'
+      get 'take', to: 'exams#take'
+      post 'submit'
     end
 
     resources :questions
+    resources :student_answers, only: [:create]
   end
 
 

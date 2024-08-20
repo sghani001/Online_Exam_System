@@ -42,7 +42,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    debugger
     @question.destroy
     redirect_to exam_path(@exam), notice: 'Question was successfully destroyed.'
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_20_064302) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_20_113448) do
   create_table "exam_outcomes", force: :cascade do |t|
     t.integer "student_id", null: false
     t.integer "exam_id", null: false
@@ -41,8 +41,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_20_064302) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "options", default: {}
-    t.text "answer"
     t.index ["exam_id"], name: "index_questions_on_exam_id"
+  end
+
+  create_table "student_answers", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "question_id", null: false
+    t.text "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "question_type"
+    t.integer "exam_id", null: false
+    t.index ["question_id"], name: "index_student_answers_on_question_id"
+    t.index ["user_id"], name: "index_student_answers_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -63,4 +74,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_20_064302) do
   add_foreign_key "exam_outcomes", "exams"
   add_foreign_key "exam_outcomes", "students"
   add_foreign_key "questions", "exams"
+  add_foreign_key "student_answers", "questions"
+  add_foreign_key "student_answers", "users"
 end

@@ -1,8 +1,9 @@
 class Question < ApplicationRecord
   belongs_to :exam
   serialize :options, Hash
+  has_many :student_answers, dependent: :destroy
 
-  validates :content, presence: true
+  validates :content, presence: { message: "can't be blank" }
   validates :question_type, inclusion: { in: %w[multiple_choice short_answer] }
   validate :validate_options_for_multiple_choice
 

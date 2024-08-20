@@ -38,7 +38,6 @@
           &nbsp&nbsp&nbsp<%= content_tag(:span, "Approved", style: "color: green;") if exam.approved? %>
           &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: red;") if exam.cancelled? %>
         </li>
-        <%= link_to  "Edit Exam", edit_exam_path(exam) %>
         <%= link_to  "Show Exam", exam_path(exam) %>
         <%if !exam.approved%>
           <%= link_to  "Request Approval", request_approval_exam_path(exam) %>

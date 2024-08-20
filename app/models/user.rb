@@ -7,6 +7,7 @@ class User < ApplicationRecord
   
   has_many :exam_outcomes, foreign_key: :student_id
   has_many :exams, foreign_key: 'teacher_id'
+  has_many :student_answers, dependent: :destroy
   validates :user_type, presence: true
 
   # Define role methods
