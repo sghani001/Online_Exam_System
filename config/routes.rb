@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       post 'approve'
       post 'cancel'
       post 'request_approval'
-      get 'next_question'
+      post 'next_question'
       get 'take', to: 'exams#take'
       post 'submit'
     end

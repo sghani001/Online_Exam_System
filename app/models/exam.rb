@@ -5,7 +5,7 @@ class Exam < ApplicationRecord
   belongs_to :teacher, class_name: 'User', foreign_key: 'teacher_id'
 
   def active?
-    start_time <= Time.current || end_time >= Time.current
+    start_time <= Time.current && end_time >= Time.current
   end
 
   validates :title, presence: true

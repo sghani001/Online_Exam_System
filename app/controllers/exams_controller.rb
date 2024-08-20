@@ -6,6 +6,11 @@ class ExamsController < ApplicationController
   def take
       @current_question_index = params[:index].to_i || 0
 
+      if StudentAnswer.exists?(user_id: current_user.id, exam_id: @exam.id)
+        redirect_to exams_path, notice: 'You have already attempted this exam.'
+        return
+      end 
+
       if @exam && @exam.questions.any?
         @question = @exam.questions.order(:id).offset(@current_question_index).limit(1).first
 
@@ -21,18 +26,15 @@ class ExamsController < ApplicationController
   
   
 
-  def next_question
-    @exam = Exam.find(params[:id])
+  def next_question   
     @current_question_index = params[:index].to_i
   
-    # Validate the answer
     if params[:student_answer].blank?
       flash[:alert] = 'Please provide an answer before proceeding to the next question.'
-      redirect_to take_exam_exam_path(@exam, index: @current_question_index)
+      redirect_to take_exam_path(@exam, index: @current_question_index)
       return
     end
   
-    # Save the answer
     StudentAnswer.create(
       user_id: current_user.id,
       question_id: params[:question_id],
@@ -40,14 +42,13 @@ class ExamsController < ApplicationController
       exam_id: @exam.id
     )
   
-    # Move to the next question
     @current_question_index += 1
     @question = @exam.questions.order(:id).offset(@current_question_index).first
   
     if @question.nil?
-      redirect_to exam_path(@exam), notice: 'You have completed the exam.'
+      redirect_to exams_path, notice: 'You have completed the exam.'
     else
-      redirect_to take_exam_exam_path(@exam, index: @current_question_index)
+      redirect_to take_exam_path(@exam, index: @current_question_index)
     end
   end
   

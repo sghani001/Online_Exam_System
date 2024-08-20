@@ -28,7 +28,9 @@
   <ul>
     <% @exam.questions.each do |question| %>
       <li>
-        <%= question.content %> &nbsp &nbsp <%= link_to  "Show Question", exam_question_path(@exam,question) %> | <%= button_to "Delete", exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= question.content %> <br>
+        <%= link_to  "Show Question", exam_question_path(@exam,question) %>
+        <%= button_to "Delete", exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
         <% if question.question_type == 'multiple_choice' %>
           <ul>
             <% question.options.each_with_index do |(key, value), index| %>

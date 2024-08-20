@@ -19,7 +19,8 @@
         <li>
           <%= exam.title %> 
           &nbsp&nbsp&nbsp<%= content_tag(:span, "Approved", style: "color: green;") if exam.approved? %>
-          &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: red;") if exam.cancelled? %>
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: brown;") if exam.cancelled? %>
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Active", style: "color: red;") if exam.active? %>
         </li>
 
         <% if !exam.approved %>
@@ -36,7 +37,8 @@
        <li>
           <%= exam.title %> 
           &nbsp&nbsp&nbsp<%= content_tag(:span, "Approved", style: "color: green;") if exam.approved? %>
-          &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: red;") if exam.cancelled? %>
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: brown;") if exam.cancelled? %>
+          &nbsp&nbsp&nbsp<%= content_tag(:span, "Active", style: "color: red;") if exam.active? %>
         </li>
         <%= link_to  "Show Exam", exam_path(exam) %>
         <%if !exam.approved%>

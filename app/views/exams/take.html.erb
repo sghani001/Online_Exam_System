@@ -28,24 +28,3 @@
 <div>
   <%= link_to 'Back', exams_path, class: "btn btn-secondary" %>
 </div>
-
-
-<script>
-  document.getElementById('question-form').addEventListener('submit', function(event) {
-    var questionType = "<%= @question.question_type %>";
-    var isValid = false;
-
-    if (questionType === 'multiple_choice') {
-        var options = document.querySelectorAll('input[name="student_answer"]');
-        isValid = Array.from(options).some(option => option.checked);
-    } else if (questionType === 'short_answer') {
-        var answer = document.querySelector('input[name="student_answer"]').value.trim();
-        isValid = answer.length > 0;
-    }
-
-    if (!isValid) {
-        alert('Please provide an answer for the question.');
-        event.preventDefault(); // Prevent form submission
-    }
-  });
-</script>
