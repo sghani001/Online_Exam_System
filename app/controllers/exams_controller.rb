@@ -1,6 +1,6 @@
 class ExamsController < ApplicationController
 
-  before_action :set_exam, only: [:show, :edit, :update, :destroy, :approve, :cancel, :take, :next_question]
+  before_action :set_exam, only: [:show, :edit, :update, :destroy, :approve, :cancel, :take, :next_question, :request_approval]
 
 
   def take
@@ -15,10 +15,10 @@ class ExamsController < ApplicationController
         @question = @exam.questions.order(:id).offset(@current_question_index).limit(1).first
 
         if @question.nil?
-          redirect_to exam_path(@exam), notice: 'No questions available for this exam.'
+          redirect_to exams_path, notice: 'No questions available for this exam.'
         end
       else
-        redirect_to exam_path(@exam), notice: 'This exam has no questions.'
+        redirect_to exams_path, notice: 'This exam has no questions.'
       end
   end
 
@@ -45,20 +45,21 @@ class ExamsController < ApplicationController
     @current_question_index += 1
     @question = @exam.questions.order(:id).offset(@current_question_index).first
   
-    if @question.nil?
-      redirect_to exams_path, notice: 'You have completed the exam.'
-    else
-      redirect_to take_exam_path(@exam, index: @current_question_index)
-    end
+    
   end
   
   
   
 
   def approve
-    @exam.update(approved: true)
-    redirect_to exams_path, notice: 'Exam was successfully approved.'
+    if @exam.questions.exists?
+      @exam.update(approved: true)
+      redirect_to exams_path, notice: 'Exam was successfully approved.'
+    else
+      redirect_to exams_path, alert: 'Exam cannot be approved without any questions.'
+    end
   end
+  
   def index
     @exams = Exam.all
   end
@@ -97,18 +98,29 @@ class ExamsController < ApplicationController
 
 
   def cancel
-    if @exam.start_time > Time.now
+    if @exam.start_time > Time.now || !@exam.approved
       @exam.update(cancelled: true)
       redirect_to exams_path, notice: 'Exam was successfully cancelled.'
+    elsif @exam.end_time < Time.now
+      redirect_to exams_path, alert: 'Cannot cancel exam after it has ended.'
     else
       redirect_to exams_path, alert: 'Cannot cancel exam after it has started.'
+    end
+  end
+
+  def request_approval
+    if @exam.cancelled
+      redirect_to exams_path, alert: 'Cannot request approval for a cancelled exam.'
+    else
+      @exam.update(request_approval: true)
+      redirect_to exams_path, notice: 'Exam approval requested.'
     end
   end
 
   def destroy
     @exam.destroy
 
-    redirect_to exams_path, notice: 'Exam was successfully destroyed.'
+    redirect_to exams_path, notice: 'Exam was successfully Deleted.'
   end
 
   private

@@ -1,5 +1,5 @@
 class ExamOutcomesController < ApplicationController
-  before_action :admin_only
+  
 
   def index
     @exam_outcomes = ExamOutcome.all

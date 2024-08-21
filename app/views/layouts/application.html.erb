@@ -10,27 +10,37 @@
     
   </head>
   <body>
-      <%if user_signed_in?%>
-        <h1>Welcome to Online Exam System.... <%= current_user.name.upcase%>!</h1>
-      <%end%>
-     <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
- <nav>
-    <hr>
-      <%= link_to 'Home', root_path %>
-      <br>
       <% if user_signed_in? %>
-        <%= link_to 'Edit Profile', edit_user_registration_path %> <br>
-<%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to logout?' }, class: 'button' %>
-        <% else %>
+  <h1>Welcome to Online Exam System.... <%= current_user.name.upcase %>!</h1>
+<% end %>
 
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
+
+<nav class="nav-container">
+  <div class="nav-left">
+    <hr>
+    <%= link_to 'Home', root_path %>
+    <br>
+    <% if user_signed_in? %>
+      <%= link_to 'Edit Profile', edit_user_registration_path %> <br>
+      <%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to logout?' }, class: 'button' %>
+    <% end %>
+    <br>
+    <% if user_signed_in? && current_user.admin? %>
+      <%= link_to 'Register new User', new_user_registration_path %>
+    <% end %>
+  </div>
+
+  <div class="nav-right">
+    <%if user_signed_in?%>
+      <% if current_user.student? && current_user.profile_picture.attached? %>
+      <%= image_tag(current_user.profile_picture, style: "height: 80px;") %>
       <% end %>
-      <br>
-      <%if user_signed_in?%>
-        <%if current_user.user_type == 'Admin' || current_user.user_type == 'admin' %>
-          <%= link_to  "Register new User", new_user_registration_path %>
-        <%end%>
-      <%end%>
+    <% end %>
+  </div>
+</nav>
+
       <hr>
     </nav>
     <%= yield %>

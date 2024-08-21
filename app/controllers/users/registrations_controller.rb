@@ -7,6 +7,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   skip_before_action :require_no_authentication, only: [:new, :create]
 
   def create
+    
     build_resource(sign_up_params)
 
     resource.save
@@ -23,7 +24,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   
   private
   def ensure_admin!
-    redirect_to(root_path, alert: 'You are not authorized to perform this action.') unless current_user.user_type == 'admin'
+    redirect_to(root_path, alert: 'You are not authorized to perform this action.') unless current_user.admin?
   end
 
   def sign_up_params
@@ -31,6 +32,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def account_update_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :current_password,:name)
+    params.require(:user).permit(:email, :password, :password_confirmation, :current_password,:name,:profile_picture)
   end
 end

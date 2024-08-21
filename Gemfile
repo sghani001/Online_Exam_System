@@ -76,3 +76,5 @@ gem "devise", "~> 4.9"
 gem "cancancan", "~> 3.6"
 
 gem "sassc-rails", "~> 2.1"
+
+gem "image_processing", "~> 1.13"

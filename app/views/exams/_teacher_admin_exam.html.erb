@@ -1,0 +1,16 @@
+<li>
+    <%= exam.title %> 
+    &nbsp&nbsp&nbsp<%= content_tag(:span, "Approved", style: "color: green;") if exam.approved? %>
+    &nbsp&nbsp&nbsp<%= content_tag(:span, "Cancelled", style: "color: brown;") if exam.cancelled? %>
+    &nbsp&nbsp&nbsp<%= content_tag(:span, "Active", style: "color: red;") if exam.active? %>
+    &nbsp&nbsp&nbsp<%= content_tag(:span, "Requested Approval", style: "color: dark green;") if exam.request_approval? && !exam.cancelled %>
+</li>
+
+
+<% if !exam.cancelled %>
+    <%= link_to 'Cancel Exam', cancel_exam_path(exam), data:{turbo_method: "post"}  %>
+<% end %>
+<%if exam.cancelled?%>
+    <%= link_to  "Delete", exam_path(exam), data:{turbo_method: :delete} %>
+<%end%>
+<%= link_to  "Show Exam", exam_path(exam) %>
