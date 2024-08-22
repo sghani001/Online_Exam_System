@@ -1,12 +1,10 @@
-<h3>All Exams</h3>
-<ul>
-  <% @exams.each do |exam| %>
-    <% case current_user.user_type %>
-    <% when 'admin' %>
-      <%= render 'admin/exams/teacher_admin_exam', exam: exam %>
-      <% if !exam.approved %>
-        <%= link_to 'Approve Exam', approve_admin_exam_path(exam), data: { turbo_method: "post" } if !exam.cancelled %>
-      <% end %>
+<div class="container mt-10">
+  <h3>All Exams</h3>
+  <div class="row">
+    <% @exams.each do |exam| %>
+      <div class="col-md-4 mb-4">
+        <%= render 'admin/exams/teacher_admin_exam', exam: exam %>
+      </div>
     <% end %>
-  <% end %>
-</ul>
+  </div>
+</div>

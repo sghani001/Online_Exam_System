@@ -1,48 +1,52 @@
-<h1>Exam Details</h1>
-<p>
-  <strong>Title:</strong>
-  <%= @exam.title %>
-</p>
-<p>
-  <strong>Description:</strong>
-  <%= @exam.description %>
-</p>
-<p>
-  <strong>Start Time:</strong>
-  <%= @exam.start_time.strftime("%B %d, %Y %I:%M %p") %>
-</p>
-<p>
-  <strong>End Time:</strong>
-  <%= @exam.end_time.strftime("%B %d, %Y %I:%M %p") %>
-</p>
-<p>
-  <strong>Approved:</strong>
-  <%= @exam.approved ? "Yes" : "No" %>
-</p>
-<p>
-  <strong>Cancelled:</strong>
-  <%= @exam.cancelled ? "Yes" : "No" %>
-</p>
-<h2>Questions</h2>
-<% if @exam.questions.any? %>
-  <ul>
-    <% @exam.questions.each do |question| %>
-      <li>
-        <%= question.content %> <br>
-        <%= link_to  "Show Question", admin_exam_question_path(@exam,question) %>
-        <%= button_to "Delete", admin_exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'%>
-        <% if question.question_type == 'multiple_choice' %>
-          <ul>
-            <% question.options.each_with_index do |(key, value), index| %>
-              <li><strong> <%= key %></strong></li>
-            <% end %>
-          </ul>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No questions available.</p>
-<% end %>
-<%= link_to 'Edit Exam Details', edit_admin_exam_path(@exam) %> &nbsp
-<%= link_to 'Back to List', admin_exams_path %>
+<div class="container mt-4">
+  <h1 class="mb-4">Exam Details</h1>
+
+  <div class="card mb-4 w-100">
+    <div class="card-body">
+      <p class="card-text">
+        <strong>Title:</strong> <%= @exam.title %><br>
+        <strong>Description:</strong> <%= @exam.description %><br>
+        <strong>Start Time:</strong> <%= @exam.start_time.strftime("%B %d, %Y %I:%M %p") %><br>
+        <strong>End Time:</strong> <%= @exam.end_time.strftime("%B %d, %Y %I:%M %p") %><br>
+        <strong>Approved:</strong> <%= @exam.approved ? "Yes" : "No" %><br>
+        <strong>Cancelled:</strong> <%= @exam.cancelled ? "Yes" : "No" %>
+      </p>
+      <%= link_to 'Edit Exam Details', edit_admin_exam_path(@exam), class: 'btn btn-primary' %>
+      <%= link_to 'Back to List', admin_exams_path, class: 'btn btn-secondary ml-2' %>
+    </div>
+  </div>
+
+  <h2 class="mb-4">Questions</h2>
+
+  <div class="card mb-4 w-100">
+    <div class="card-body">
+      <% if @exam.questions.any? %>
+        <ul class="list-group list-group-flush">
+          <% @exam.questions.each do |question| %>
+            <li class="list-group-item">
+              <p>
+                <strong>Question:</strong> <%= question.content %>
+              </p>
+              <div class="mb-2">
+                <%= link_to 'Show Question', admin_exam_question_path(@exam, question), class: 'btn btn-info' %>
+                <%= button_to 'Delete', admin_exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger ml-2' %>
+              </div>
+
+              <% if question.question_type == 'multiple_choice' %>
+                <ul class="list-group mt-2">
+                  <% question.options.each_with_index do |(key, value), index| %>
+                    <li class="list-group-item">
+                      <strong>Option <%= index + 1 %>:</strong> <%= key %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="alert alert-warning">No questions available.</div>
+      <% end %>
+    </div>
+  </div>
+</div>

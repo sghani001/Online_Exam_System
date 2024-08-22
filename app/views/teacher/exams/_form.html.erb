@@ -1,47 +1,54 @@
-<%= form_with(model: @exam, url: (@exam.persisted? ? teacher_exam_path(@exam) : teacher_exams_path), 
-              method: (@exam.persisted? ? :patch : :post), local: true) do |form| %>
-  <% if @exam.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@exam.errors.count, "error") %> prohibited this exam from being saved:</h2>
-      <ul>
-        <% @exam.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title, id: :title %>
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="card-title"><%= @exam.persisted? ? 'Edit Exam' : 'New Exam' %></h5>
   </div>
+  <div class="card-body">
+    <%= form_with(model: @exam, 
+                  url: (@exam.persisted? ? teacher_exam_path(@exam) : teacher_exams_path), 
+                  method: (@exam.persisted? ? :patch : :post), 
+                  local: true, 
+                  class: "mb-4") do |form| %>
+      
+      <% if @exam.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <h4><%= pluralize(@exam.errors.count, "error") %> prohibited this exam from being saved:</h4>
+          <ul class="list-unstyled">
+            <% @exam.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <div class="field">
-    <%= form.label :subject %>
-    <%= form.text_field :subject, id: :subject %>
+      <div class="mb-3">
+        <%= form.label :title, class: "form-label" %>
+        <%= form.text_field :title, id: :title, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :subject, class: "form-label" %>
+        <%= form.text_field :subject, id: :subject, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, class: "form-label" %>
+        <%= form.text_area :description, id: :description, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :start_time, class: "form-label" %>
+        <%= form.datetime_select :start_time, id: :start_time, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :end_time, class: "form-label" %>
+        <%= form.datetime_select :end_time, id: :end_time, class: "form-control" %>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <%= form.submit @exam.persisted? ? 'Update Exam' : 'Create Exam', class: "btn btn-primary" %>
+        <%= link_to 'Back', teacher_exams_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description, id: :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :start_time %>
-    <%= form.datetime_select :start_time, id: :start_time %>
-  </div>
-
-  <div class="field">
-    <%= form.label :end_time %>
-    <%= form.datetime_select :end_time, id: :end_time %>
-  </div>
-
-  <br>
-  <br>
-
-  <div class="actions">
-    <%= form.submit @exam.persisted? ? 'Update Exam' : 'Create Exam' %>
-  </div>
-<% end %>
-
-<%= link_to 'Back', teacher_exams_path %>
+</div>

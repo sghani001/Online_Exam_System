@@ -3,35 +3,38 @@
                 url: @question.persisted? ? teacher_exam_question_path(@exam, @question) : teacher_exam_questions_path(@exam),
                 method: @question.persisted? ? :patch : :post, 
                 local: true) do |f| %>
-    <div class="field">
-      <%= f.label :content, "Question" %>
-      <%= f.text_area :content %>
+    
+    <div class="mb-3">
+      <%= f.label :content, "Question", class: "form-label" %>
+      <%= f.text_area :content, class: "form-control" %>
     </div>
 
-    <div class="field">
-      <%= f.label :question_type, "Question Type" %>
-      <%= f.select :question_type, options_for_select([['Multiple Choice', 'multiple_choice'], ['Short Answer', 'short_answer']]), {}, { id: 'question_type_select' } %>
+    <div class="mb-3">
+      <%= f.label :question_type, "Question Type", class: "form-label" %>
+      <%= f.select :question_type, options_for_select([['Multiple Choice', 'multiple_choice'], ['Short Answer', 'short_answer']]), {}, { id: 'question_type_select', class: "form-select" } %>
     </div>
 
-    <div id="multiple-choice-options" style="display: <%= @question.question_type == 'multiple_choice' ? 'block' : 'none' %>;">
+    <div id="multiple-choice-options" class="mb-3" style="display: <%= @question.question_type == 'multiple_choice' ? 'block' : 'none' %>;">
       <h4>Options:</h4>
-      <%= f.label :option_1, "Option 1" %>
-      <%= f.text_field :option_1 %><br>
+      <div class="mb-2">
+        <%= f.label :option_1, "Option 1", class: "form-label" %>
+        <%= f.text_field :option_1, class: "form-control" %>
+      </div>
 
-      <%= f.label :option_2, "Option 2" %>
-      <%= f.text_field :option_2 %><br>
+      <div class="mb-2">
+        <%= f.label :option_2, "Option 2", class: "form-label" %>
+        <%= f.text_field :option_2, class: "form-control" %>
+      </div>
 
-      <%= f.label :option_3, "Option 3" %>
-      <%= f.text_field :option_3 %><br>
+      <div class="mb-2">
+        <%= f.label :option_3, "Option 3", class: "form-label" %>
+        <%= f.text_field :option_3, class: "form-control" %>
+      </div>
     </div>
 
-  
-
-    <div class="actions">
-      <%= f.submit @question.persisted? ? "Update Question" : "Create Question", data: { turbo_frame: "_top" } %>
-    </div>
-    <div class="actions">
-      <%= link_to "Back to Exam", teacher_exam_path(@exam), data: { turbo_frame: "_top" } %>
+    <div class="d-flex justify-content-between mt-4">
+      <%= f.submit @question.persisted? ? "Update Question" : "Create Question", class: "btn btn-primary" %>
+      <%= link_to "Back to Exam", teacher_exam_path(@exam), class: "btn btn-secondary" %>
     </div>
   <% end %>
 <% end %>

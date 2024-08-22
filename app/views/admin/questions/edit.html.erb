@@ -1,39 +1,42 @@
-<h1>Edit Question</h1>
+<div class="container mt-4">
+  <h1>Edit Question</h1>
 
-<%= form_with(model: [@exam, @question], 
-              url: admin_exam_question_path(@exam, @question), 
-              method: :patch, 
-              local: true) do |form| %>
-  <div class="field">
-    <%= form.label :content %>
-    <%= form.text_area :content, rows: 3 %>
-  </div>
-
-  <div class="field">
-    <%= form.label :question_type %>
-    <%= form.select :question_type, ['multiple_choice', 'short_answer'] %>
-  </div>
-
-  <% if @question.question_type == 'multiple_choice' %>
-    <div class="field">
-      <%= form.label :option_1, "Option 1" %>
-      <%= form.text_field :option_1 %>
+  <%= form_with(model: [@exam, @question], 
+                url: admin_exam_question_path(@exam, @question), 
+                method: :patch, 
+                local: true, 
+                class: "mb-4") do |form| %>
+    
+    <div class="mb-3">
+      <%= form.label :content, class: "form-label" %>
+      <%= form.text_area :content, rows: 3, class: "form-control" %>
     </div>
 
-    <div class="field">
-      <%= form.label :option_2, "Option 2" %>
-      <%= form.text_field :option_2 %>
+    <div class="mb-3">
+      <%= form.label :question_type, class: "form-label" %>
+      <%= form.select :question_type, ['multiple_choice', 'short_answer'], {}, class: "form-select" %>
     </div>
 
-    <div class="field">
-      <%= form.label :option_3, "Option 3" %>
-      <%= form.text_field :option_3 %>
+    <% if @question.question_type == 'multiple_choice' %>
+      <div class="mb-3">
+        <%= form.label :option_1, "Option 1", class: "form-label" %>
+        <%= form.text_field :option_1, class: "form-control", value: @question.options['option_1'] %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :option_2, "Option 2", class: "form-label" %>
+        <%= form.text_field :option_2, class: "form-control", value: @question.options['option_2'] %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :option_3, "Option 3", class: "form-label" %>
+        <%= form.text_field :option_3, class: "form-control", value: @question.options['option_3'] %>
+      </div>
+    <% end %>
+
+    <div class="d-flex justify-content-between">
+      <%= form.submit 'Update Question', class: "btn btn-primary" %>
+      <%= link_to 'Back to Exam', admin_exam_path(@exam), class: "btn btn-secondary" %>
     </div>
   <% end %>
-
-  <div class="actions">
-    <%= form.submit 'Update Question' %>
-  </div>
-<% end %>
-
-<%= link_to 'Back to Exam', admin_exam_path(@exam) %>
+</div>

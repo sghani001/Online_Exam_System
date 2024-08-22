@@ -25,8 +25,10 @@ module Admin
     
   
     def edit
-      if @exam.start_time < Time.now
+      if @exam.start_time < Time.now && @exam.end_time > Time.now
         redirect_to admin_exams_path, alert: 'Cannot edit exam after it has started.'
+      elsif @exam.end_time < Time.now
+        redirect_to admin_exams_path, alert: 'Cannot edit exam after it has ended.'
       end
     end
   

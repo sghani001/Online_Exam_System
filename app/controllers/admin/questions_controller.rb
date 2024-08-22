@@ -10,11 +10,19 @@ module Admin
     end
   
     def edit
-      @question = @exam.questions.find(params[:id])
-
     end
   
     def update
+      
+  
+      if @question.question_type == 'multiple_choice'
+        @question.options = {
+          params[:question][:option_1] => false,
+          params[:question][:option_2] => false,
+          params[:question][:option_3] => false
+        }
+      end
+  
       if @question.update(question_params)
         redirect_to admin_exam_question_path(@exam, @question), notice: 'Question was successfully updated.'
       else
