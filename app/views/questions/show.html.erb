@@ -15,6 +15,6 @@
     <% end %>
   </ul>
 <% end %>
-<%= link_to 'Edit Question', edit_exam_question_path(@exam, @question) %> |
-<%= link_to 'Back to Exam', exam_path(@exam) %> |
-<%= link_to  "Delete", exam_question_path(@exam,@question), data:{turbo_method: :delete} %>
+<%= link_to 'Edit Question', edit_exam_question_path(@exam, @question) %> &nbsp
+<%= link_to 'Back to Exam', exam_path(@exam) %> &nbsp
+<%= link_to  "Delete", exam_question_path(@exam,@question), data:{turbo_method: :delete} if current_user.teacher?%>

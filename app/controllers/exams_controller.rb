@@ -45,11 +45,15 @@ class ExamsController < ApplicationController
     @current_question_index += 1
     @question = @exam.questions.order(:id).offset(@current_question_index).first
   
+    if @question.nil?
+      redirect_to exams_path, notice: 'You have completed the exam.'
+    else
+      redirect_to take_exam_path(@exam, index: @current_question_index)
+    end
+  
     
   end
-  
-  
-  
+
 
   def approve
     if @exam.questions.exists?
@@ -111,6 +115,10 @@ class ExamsController < ApplicationController
   def request_approval
     if @exam.cancelled
       redirect_to exams_path, alert: 'Cannot request approval for a cancelled exam.'
+    elsif @exam.approved
+      redirect_to exams_path, alert: 'Exam is already approved.'
+    elsif @exam.start_time < Time.now && @exam.end_time < Time.now
+      redirect_to exams_path, alert: 'Cannot Request approval for an exam that has ended.'
     else
       @exam.update(request_approval: true)
       redirect_to exams_path, notice: 'Exam approval requested.'

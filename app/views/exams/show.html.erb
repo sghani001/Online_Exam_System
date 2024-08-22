@@ -30,7 +30,7 @@
       <li>
         <%= question.content %> <br>
         <%= link_to  "Show Question", exam_question_path(@exam,question) %>
-        <%= button_to "Delete", exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= button_to "Delete", exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if current_user.teacher?%>
         <% if question.question_type == 'multiple_choice' %>
           <ul>
             <% question.options.each_with_index do |(key, value), index| %>
@@ -44,6 +44,6 @@
 <% else %>
   <p>No questions available.</p>
 <% end %>
-<%= link_to "Add Question", new_exam_question_path(@exam) %> |
-<%= link_to 'Edit Exam Details', edit_exam_path(@exam) %> |
+<%= link_to "Add Question", new_exam_question_path(@exam) if current_user.teacher? %> &nbsp
+<%= link_to 'Edit Exam Details', edit_exam_path(@exam) %> &nbsp
 <%= link_to 'Back to List', exams_path %>
