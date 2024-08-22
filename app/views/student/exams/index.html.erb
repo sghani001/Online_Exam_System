@@ -1,0 +1,28 @@
+
+<h3>All Exams</h3>
+
+
+<ul>
+  <% @exams.each do |exam| %>
+    <%if !exam.cancelled && exam.approved?%>
+      <% if exam.active?%>
+      <br>
+        <strong>Active Exams</strong>
+        <li><%= exam.title %></li>
+        <%= link_to 'Take Exam', take_student_exam_path(exam) %>
+      <%else%>
+        <%if exam.start_time > Time.now%>
+          <strong>Upcoming Exams</strong>
+          <li><%= exam.title %></li>
+        <% elsif exam.end_time < Time.now%>
+          <strong>Missed Exams</strong>
+          <li><%= exam.title %></li>
+        <%end%>
+      <%end%>
+    <% end %>
+  <% end %>
+</ul>
+
+<% if user_signed_in? && current_user.teacher? %>
+  <%= link_to 'Create New Exam', new_exam_path %>
+<% end %>

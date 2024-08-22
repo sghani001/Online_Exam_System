@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'exams#index'
+  root to: 'home#index'
   
   devise_for :users, controllers: {
     registrations: 'users/registrations',
@@ -11,21 +11,54 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
 
-  resources :exams do
-    member do
-      post 'approve'
-      post 'cancel'
-      post 'request_approval'
-      post 'next_question'
-      get 'take', to: 'exams#take'
-      post 'submit'
+
+
+  namespace :admin do
+    root to: 'exams#index'
+    resources :exams do
+      member do
+        post 'approve'
+        post 'cancel'
+      end
+
+      resources :questions
     end
 
-    resources :questions
-    resources :student_answers, only: [:create]
+    resources :users, only: [:new, :create]
+    resources :exam_outcomes, only: [:index, :show]
   end
 
 
-  resources :exam_outcomes, only: [:index, :show]
-  resources :users, only: [:new, :create]
+  namespace :teacher do
+    root to: 'exams#index'
+    resources :exams do
+      member do
+        post 'cancel'
+        post 'request_approval'
+        post 'submit'
+      end
+
+      resources :questions
+    end
+
+    resources :exam_outcomes, only: [:index, :show]
+  end
+
+
+
+  namespace :student do
+    root to: 'exams#index'  # Root path for students
+    resources :exams, only: [:index, :show] do
+      member do
+        get 'take', to: 'exams#take'
+        post 'next_question'
+        post 'submit'
+      end
+
+      resources :student_answers, only: [:create]
+    end
+
+    resources :exam_outcomes, only: [:index, :show]
+  end
+
 end

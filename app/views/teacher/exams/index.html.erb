@@ -1,0 +1,17 @@
+
+<h3>All Exams</h3>
+
+
+<ul>
+  <% @exams.each do |exam| %>
+      <%= render 'teacher/exams/teacher_admin_exam', exam: exam%>
+      <%if !exam.approved && !exam.request_approval && !exam.cancelled%>
+        <%= link_to  "Request Approval", request_approval_teacher_exam_path(exam), data:{turbo_method: "post"} %>
+      <%end%>
+    
+  <% end %>
+</ul>
+
+<% if user_signed_in? %>
+  <%= link_to 'Create New Exam', new_teacher_exam_path %>
+<% end %>

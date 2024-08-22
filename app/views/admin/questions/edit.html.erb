@@ -1,0 +1,39 @@
+<h1>Edit Question</h1>
+
+<%= form_with(model: [@exam, @question], 
+              url: admin_exam_question_path(@exam, @question), 
+              method: :patch, 
+              local: true) do |form| %>
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content, rows: 3 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :question_type %>
+    <%= form.select :question_type, ['multiple_choice', 'short_answer'] %>
+  </div>
+
+  <% if @question.question_type == 'multiple_choice' %>
+    <div class="field">
+      <%= form.label :option_1, "Option 1" %>
+      <%= form.text_field :option_1 %>
+    </div>
+
+    <div class="field">
+      <%= form.label :option_2, "Option 2" %>
+      <%= form.text_field :option_2 %>
+    </div>
+
+    <div class="field">
+      <%= form.label :option_3, "Option 3" %>
+      <%= form.text_field :option_3 %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit 'Update Question' %>
+  </div>
+<% end %>
+
+<%= link_to 'Back to Exam', admin_exam_path(@exam) %>

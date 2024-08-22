@@ -1,0 +1,20 @@
+<h3>Question Details</h3>
+<p>
+  <strong>Content:</strong>
+  <%= @question.content %>
+</p>
+<p>
+  <strong>Question Type:</strong>
+  <%= @question.question_type %>
+</p>
+<% if @question.question_type == 'multiple_choice' %>
+  <h4>Options:</h4>
+  <ul>
+    <% @question.options.each_with_index do |(key, value), index| %>
+      <li><strong><%= key %></strong></li>
+    <% end %>
+  </ul>
+<% end %>
+<%= link_to 'Edit Question', edit_admin_exam_question_path(@exam, @question) %> &nbsp
+<%= link_to 'Back to Exam', admin_exam_path(@exam) %> &nbsp
+<%= link_to  "Delete", admin_exam_question_path(@exam,@question), data:{turbo_method: :delete}%>

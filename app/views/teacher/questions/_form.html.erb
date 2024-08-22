@@ -1,0 +1,61 @@
+<%= turbo_frame_tag "question_form" do %>
+  <%= form_with(model: [@exam, @question], 
+                url: @question.persisted? ? teacher_exam_question_path(@exam, @question) : teacher_exam_questions_path(@exam),
+                method: @question.persisted? ? :patch : :post, 
+                local: true) do |f| %>
+    <div class="field">
+      <%= f.label :content, "Question" %>
+      <%= f.text_area :content %>
+    </div>
+
+    <div class="field">
+      <%= f.label :question_type, "Question Type" %>
+      <%= f.select :question_type, options_for_select([['Multiple Choice', 'multiple_choice'], ['Short Answer', 'short_answer']]), {}, { id: 'question_type_select' } %>
+    </div>
+
+    <div id="multiple-choice-options" style="display: <%= @question.question_type == 'multiple_choice' ? 'block' : 'none' %>;">
+      <h4>Options:</h4>
+      <%= f.label :option_1, "Option 1" %>
+      <%= f.text_field :option_1 %><br>
+
+      <%= f.label :option_2, "Option 2" %>
+      <%= f.text_field :option_2 %><br>
+
+      <%= f.label :option_3, "Option 3" %>
+      <%= f.text_field :option_3 %><br>
+    </div>
+
+  
+
+    <div class="actions">
+      <%= f.submit @question.persisted? ? "Update Question" : "Create Question", data: { turbo_frame: "_top" } %>
+    </div>
+    <div class="actions">
+      <%= link_to "Back to Exam", teacher_exam_path(@exam), data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>
+
+<script>
+document.addEventListener("turbo:load", function() {
+  const questionTypeSelect = document.querySelector("#question_type_select");
+  const multipleChoiceOptions = document.getElementById("multiple-choice-options");
+  const shortAnswerField = document.getElementById("short-answer-field");
+
+  function toggleFields() {
+    if (questionTypeSelect.value === "multiple_choice") {
+      multipleChoiceOptions.style.display = "block";
+      shortAnswerField.style.display = "none";
+    } else if (questionTypeSelect.value === "short_answer") {
+      multipleChoiceOptions.style.display = "none";
+      shortAnswerField.style.display = "block";
+    } else {
+      multipleChoiceOptions.style.display = "none";
+      shortAnswerField.style.display = "none";
+    }
+  }
+
+  questionTypeSelect.addEventListener("change", toggleFields);
+  toggleFields(); // Call on page load
+});
+</script>

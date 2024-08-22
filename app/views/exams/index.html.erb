@@ -8,7 +8,7 @@
       <% when 'admin' %>
         <%= render 'exams/teacher_admin_exam', exam: exam%>
         <% if !exam.approved %>
-          <%= link_to 'Approve Exam', approve_exam_path(exam), data: {turbo_method: "post"} if !exam.cancelled%>
+          <%= link_to 'Approve Exam', approve_admin_exam_path(exam), data: {turbo_method: "post"} if !exam.cancelled%>
         <% end %>
       <% when 'teacher' %>
         <%= render 'exams/teacher_admin_exam', exam: exam%>

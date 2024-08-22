@@ -1,0 +1,47 @@
+<%= form_with(model: @exam, url: (@exam.persisted? ? teacher_exam_path(@exam) : teacher_exams_path), 
+              method: (@exam.persisted? ? :patch : :post), local: true) do |form| %>
+  <% if @exam.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@exam.errors.count, "error") %> prohibited this exam from being saved:</h2>
+      <ul>
+        <% @exam.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, id: :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :subject %>
+    <%= form.text_field :subject, id: :subject %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description, id: :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :start_time %>
+    <%= form.datetime_select :start_time, id: :start_time %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_time %>
+    <%= form.datetime_select :end_time, id: :end_time %>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="actions">
+    <%= form.submit @exam.persisted? ? 'Update Exam' : 'Create Exam' %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', teacher_exams_path %>

@@ -1,0 +1,30 @@
+<h1><%= @exam.title %></h1>
+<p><%= @exam.description %></p>
+
+<%= form_with(url: next_question_student_exam_path(@exam, index: @current_question_index), method: :post, local: true, html: { id: 'question-form' }) do |form| %>
+  <div class="question">
+    <h3><%= @question.content %></h3>
+
+    <% if @question.question_type == 'multiple_choice' %>
+      <% @question.options.each_with_index do |(key, value), index| %>
+        <div>
+          <%= form.radio_button :student_answer, key, id: "option_#{index}" %>
+          <%= form.label "option_#{index}", key %>
+        </div>
+      <% end %>
+    <% elsif @question.question_type == 'short_answer' %>
+      <div>
+        <%= form.label :student_answer, "Your Answer" %>
+        <%= form.text_field :student_answer %>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :question_id, value: @question.id %>
+  </div>
+
+  <%= form.submit "Next Question", id: "submit-button" %>
+<% end %>
+
+<div>
+  <%= link_to 'Back', student_exams_path, class: "btn btn-secondary" %>
+</div>
