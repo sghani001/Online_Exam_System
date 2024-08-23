@@ -28,7 +28,7 @@
                 <strong>Question:</strong> <%= question.content %>
               </p>
               <div class="mb-2">
-                <%= link_to 'Show Question', teacher_exam_question_path(@exam, question), class: 'btn btn-info' %>
+                <%= link_to 'Show Question', teacher_exam_question_path(@exam, question), class: 'btn btn-info mb-2' %>
                 <%= button_to 'Delete', teacher_exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger ml-2' if current_user.teacher? %>
               </div>
 

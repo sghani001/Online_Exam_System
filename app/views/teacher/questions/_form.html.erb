@@ -33,7 +33,7 @@
     </div>
 
     <div class="d-flex justify-content-between mt-4">
-      <%= f.submit @question.persisted? ? "Update Question" : "Create Question", class: "btn btn-primary" %>
+      <%= f.submit @question.persisted? ? "Update Question" : "Create Question", class: "btn btn-primary" ,data: { turbo_frame: "_top" }%>
       <%= link_to "Back to Exam", teacher_exam_path(@exam), class: "btn btn-secondary" %>
     </div>
   <% end %>

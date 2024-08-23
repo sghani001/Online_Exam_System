@@ -35,7 +35,7 @@ module Teacher
   
     def update
       if @exam.update(exam_params)
-        redirect_to teacher_exam_path(@exam), notice: 'hello  Exam was successfully updated.'
+        redirect_to teacher_exam_path(@exam), notice: 'Exam was successfully updated.'
       else
         render :edit
       end

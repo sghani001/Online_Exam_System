@@ -1,5 +1,4 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  
   before_action :authenticate_user!
   before_action :ensure_admin!, only: [:new, :create]
 
@@ -7,7 +6,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   skip_before_action :require_no_authentication, only: [:new, :create]
 
   def create
-    
     build_resource(sign_up_params)
 
     resource.save
@@ -20,8 +18,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       respond_with resource
     end
   end
-  
-  
+
   private
   def ensure_admin!
     redirect_to(root_path, alert: 'You are not authorized to perform this action.') unless current_user.admin?

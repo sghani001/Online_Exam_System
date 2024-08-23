@@ -1,28 +1,43 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h3 class="text-success">Active Exams</h3>
+      <% @exams.each do |exam| %>
+        <% if exam.active? && !exam.cancelled && exam.approved? %>
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title"><%= exam.title %></h5>
+              <%= link_to 'Take Exam', take_student_exam_path(exam), class: 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
 
-<h3>All Exams</h3>
+    <div class="col-md-4">
+      <h3 class="text-warning">Upcoming Exams</h3>
+      <% @exams.each do |exam| %>
+        <% if exam.start_time > Time.now && !exam.cancelled && exam.approved? %>
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title"><%= exam.title %></h5>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
 
-
-<ul>
-  <% @exams.each do |exam| %>
-    <%if !exam.cancelled && exam.approved?%>
-      <% if exam.active?%>
-      <br>
-        <strong>Active Exams</strong>
-        <li><%= exam.title %></li>
-        <%= link_to 'Take Exam', take_student_exam_path(exam) %>
-      <%else%>
-        <%if exam.start_time > Time.now%>
-          <strong>Upcoming Exams</strong>
-          <li><%= exam.title %></li>
-        <% elsif exam.end_time < Time.now%>
-          <strong>Missed Exams</strong>
-          <li><%= exam.title %></li>
-        <%end%>
-      <%end%>
-    <% end %>
-  <% end %>
-</ul>
-
-<% if user_signed_in? && current_user.teacher? %>
-  <%= link_to 'Create New Exam', new_exam_path %>
-<% end %>
+    <div class="col-md-4">
+      <h3 class="text-danger">Missed Exams</h3>
+      <% @exams.each do |exam| %>
+        <% if exam.end_time < Time.now && !exam.cancelled && exam.approved? %>
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title"><%= exam.title %></h5>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
