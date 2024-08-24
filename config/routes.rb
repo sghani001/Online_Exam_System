@@ -36,6 +36,16 @@ Rails.application.routes.draw do
         post 'cancel'
         post 'request_approval'
         post 'submit'
+        get 'review_exam'
+        post 'assign_marks'
+      end
+      collection do
+        get 'taken_exams'
+      end
+      resources :review_answers, only: [:index] do
+        collection do
+          patch :update_marks
+        end
       end
 
       resources :questions

@@ -1,5 +1,4 @@
-<div class="card mb-3">
-  <%# Determine card header color based on exam status %>
+<div class="card_exam mb-3">
   <% header_class = if exam.cancelled?
                       'bg-brown text-white'
                     elsif exam.start_time < Time.now && exam.end_time < Time.now
@@ -11,7 +10,7 @@
                     elsif exam.request_approval?
                       'bg-yellow text-dark'
                     else
-                      'bg-light text-dark'
+                      'bg-blue text-dark'
                     end %>
 
   <div class="card-header <%= header_class %>">
@@ -26,13 +25,13 @@
       <%= content_tag(:span, "Active", class: "text-red") if exam.active? %>
       <%= content_tag(:span, "Requested Approval", class: "text-dark-green") if (exam.request_approval? && !exam.cancelled? && !exam.approved?) %>
     </p>
+  </div>
+  <div class="card-footer d-flex justify-content-between flex-wrap">
     <% unless exam.cancelled? %>
-        <%= link_to 'Cancel Exam', cancel_admin_exam_path(exam), class: 'btn btn-warning mb-1', data: { turbo_method: 'post' } %>
+      <%= link_to 'Cancel Exam', cancel_admin_exam_path(exam), class: 'btn btn-warning flex-grow-1 mx-1', data: { turbo_method: 'post' } %>
     <% end %>
-
-    <%= link_to 'Approve', approve_admin_exam_path(exam), class: 'btn btn-secondary mb-1',data: {turbo_method: 'post'} if !exam.approved %>
-    <%= link_to 'Delete', admin_exam_path(exam), class: 'btn btn-danger mb-1', data: { turbo_method: :delete } %>
-    <%= link_to 'Show Exam', admin_exam_path(exam), class: 'btn btn-primary' %>
-
+    <%= link_to 'Approve', approve_admin_exam_path(exam), class: 'btn btn-secondary flex-grow-1 mx-1', data: { turbo_method: 'post' } if !exam.approved && exam.request_approval %>
+    <%= link_to 'Delete', admin_exam_path(exam), class: 'btn btn-danger flex-grow-1 mx-1', data: { turbo_method: :delete } %>
+    <%= link_to 'Show Exam', admin_exam_path(exam), class: 'btn btn-primary flex-grow-1 mx-1' %>
   </div>
 </div>

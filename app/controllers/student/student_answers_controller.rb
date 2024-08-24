@@ -2,7 +2,7 @@ module Student
   class StudentAnswersController < ApplicationController
     def create
       @exam = Exam.find(params[:exam_id])
-  
+      
       if params[:student_answers].present?
         params[:student_answers].each do |question_id, answer|
           StudentAnswer.create(

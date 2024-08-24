@@ -1,9 +1,38 @@
 module Teacher
   class ExamsController < ApplicationController
 
-    before_action :set_exam, only: [:show, :edit, :update, :destroy, :cancel, :request_approval]
+    before_action :set_exam, only: [:show, :edit, :update, :destroy, :cancel, :request_approval, :review_exam, :assign_marks]
   
+    
+
+    
+    def taken_exams
+      @taken_exams = StudentAnswer.joins(:exam, :user)
+                                  .where(exams: { teacher_id: current_user.id })
+                                  .select('student_answers.*, exams.title AS exam_title, users.name AS student_name')
+    end
+
+    def review_exam
+      @students = User.where(id: StudentAnswer.where(exam_id: @exam.id).select(:user_id).distinct)
+    end
   
+    def assign_marks
+      @exam = Exam.find(params[:id])
+      @students = User.where(id: StudentAnswer.where(exam_id: @exam.id).select(:user_id).distinct)
+      
+      @students.each do |student|
+        total_marks = 0
+        StudentAnswer.where(exam_id: @exam.id, user_id: student.id).each do |answer|
+          marks = params[:marks][answer.question_id.to_s].to_i
+          answer.update(marks: marks)
+          total_marks += marks
+        end
+        
+        ExamOutcome.find_or_create_by(student_id: student.id, exam_id: @exam.id).update(score: total_marks)
+      end
+  
+      redirect_to teacher_exams_path, notice: 'Marks assigned successfully'
+    end
     
     def index
       @exams = Exam.all

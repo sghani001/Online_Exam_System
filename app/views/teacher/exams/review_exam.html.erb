@@ -1,0 +1,28 @@
+<%= form_with url: assign_marks_teacher_exam_path(@exam), method: :post, local: true do %>
+  <h2>Review Exam: <%= @exam.title %></h2>
+
+  <% @students.each do |student| %>
+    <h3><%= student.name %></h3>
+    
+    <% # Get all answers for the current student and exam %>
+    <% student_answers = StudentAnswer.where(exam_id: @exam.id, user_id: student.id) %>
+    
+    <% if student_answers.any? %>
+      <div class="form-group">
+        <% student_answers.each do |answer| %>
+          <div class="form-group">
+            <label><%= answer.question.content %></label>
+            <p><strong>Answer:</strong> <%= answer.answer %></p>
+            <input type="number" name="marks[<%= answer.id %>]" value="<%= answer.marks || 0 %>" class="form-control" placeholder="Enter marks" />
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>No answers found for this student.</p>
+    <% end %>
+    
+    <hr>
+  <% end %>
+
+  <%= submit_tag 'Save Marks', class: 'btn btn-primary' %>
+<% end %>

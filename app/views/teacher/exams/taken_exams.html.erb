@@ -1,0 +1,15 @@
+<div class="row">
+  <% @taken_exams.each do |taken_exam| %>
+    <div class="col-md-4 mb-3">
+      <div class="card taken-exam-card h-100">
+        <div class="card-header bg-brown text-white">
+          <h5 class="card-title text-center"><%= taken_exam.exam_title %></h5>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-between">
+          <p class="card-text"><strong>Student:</strong> <%= taken_exam.student_name %></p>
+          <%= link_to 'Review Exam', review_exam_teacher_exam_path(taken_exam.exam_id), class: 'btn btn-primary mt-auto' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

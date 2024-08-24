@@ -1,15 +1,18 @@
-
-.card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+/* General Card Styling */
+.card_exam {
+  margin-bottom: 1rem; /* Ensure consistent spacing between cards */
+  padding: 1rem; /* Ensure padding inside the card */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for cards */
+  height: auto; /* Allow card height to adjust based on content */
 }
 
-.card:hover {
-  transform: translateY(-10px); /* Move card up on hover */
+.card_exam:hover {
+  transform: translateY(-10px); /* Hover effect to lift the card */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increased shadow on hover */
 }
 
-/* Header Colors */
+/* Header Background Colors */
 .bg-black {
   background-color: #000000 !important; /* Black for missed exams */
 }
@@ -25,55 +28,51 @@
 .bg-yellow {
   background-color: #ffc107 !important; /* Yellow for requested approval exams */
 }
+
 .bg-red {
   background-color: #dc3545 !important; /* Red for active exams */
 }
 
-.text-white {
-  color: #ffffff !important; /* White text */
+.bg-blue {
+  background-color: rgb(0, 255, 255) !important; /* Cyan for default exams */
 }
 
 /* Text Colors */
+.text-white {
+  color: #ffffff !important; /* White text for headers */
+}
+
 .text-success {
-  color: #28a745 !important; /* Green text */
+  color: #28a745 !important; /* Green text for approved status */
 }
 
 .text-brown {
-  color: #6f4e37 !important; /* Brown text */
+  color: #6f4e37 !important; /* Brown text for canceled status */
 }
 
 .text-red {
-  color: #dc3545 !important; /* Red text */
+  color: #dc3545 !important; /* Red text for active status */
 }
 
 .text-dark-green {
-  color: #006400 !important; /* Dark green text */
+  color: #006400 !important; /* Dark green text for requested approval status */
+}
+
+/* Button and Footer Styling */
+.card-footer .btn {
+  min-width: 100px; /* Minimum button width */
+  max-width: 150px; /* Maximum button width */
+  flex-grow: 1; /* Allow buttons to expand */
+  margin-bottom: 0.5rem; /* Ensure spacing between buttons */
+}
+
+.card-footer {
+  padding: 0.5rem 0; /* Consistent padding inside footer */
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Allow buttons to wrap within the footer */
 }
 
 
-.card {
-  margin-bottom: 1rem; /* Adjust as needed */
-  padding: 1rem; /* Ensure padding is appropriate */
-}
 
-/* Ensure there's no extra padding in the container or body */
-.container {
-  padding: 0;
-}
 
-body {
-  margin: 0;
-}
-
-.nav-container {
-  margin-bottom: 0;
-}
-/* Card Container Styling */
-.card {
-  margin: 0; /* Ensure no extra margin */
-  padding: 1rem; /* Ensure padding is consistent */
-}
-
-.card-body {
-  padding: 1rem; /* Ensure consistent padding inside the card */
-}
