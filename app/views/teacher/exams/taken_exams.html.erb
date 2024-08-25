@@ -1,7 +1,7 @@
-<div class="row">
+<div class="container mt-10 row">
   <% @taken_exams.each do |taken_exam| %>
-    <div class="col-md-4 mb-3">
-      <div class="card taken-exam-card h-100">
+    <div class="col-md-4 mb-4">
+      <div class="card card_exam mb-3 h-100">
         <div class="card-header bg-brown text-white">
           <h5 class="card-title text-center"><%= taken_exam.exam_title %></h5>
         </div>

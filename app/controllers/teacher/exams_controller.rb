@@ -9,8 +9,9 @@ module Teacher
     def taken_exams
       @taken_exams = StudentAnswer.joins(:exam, :user)
                                   .where(exams: { teacher_id: current_user.id })
-                                  .select('student_answers.*, exams.title AS exam_title, users.name AS student_name')
+                                  .select('DISTINCT exams.id AS exam_id, exams.title AS exam_title, users.name AS student_name')
     end
+    
 
     def review_exam
       @students = User.where(id: StudentAnswer.where(exam_id: @exam.id).select(:user_id).distinct)
