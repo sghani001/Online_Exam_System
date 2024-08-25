@@ -1,6 +1,7 @@
 class Exam < ApplicationRecord
   has_many :questions, dependent: :destroy
   has_many :exam_outcomes
+  has_many :students, through: :student_answers, source: :user
   has_many :student_answers, through: :questions
   belongs_to :teacher, class_name: 'User', foreign_key: 'teacher_id'
   validate :end_time_after_start_time

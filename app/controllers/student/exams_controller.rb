@@ -1,7 +1,7 @@
 module Student
   class ExamsController < ApplicationController
 
-    before_action :set_exam, only: [:show, :take, :next_question]
+    before_action :set_exam, only: [:show, :take, :next_question, :review_student_exam]
   
   
     def take
@@ -59,7 +59,29 @@ module Student
     
     def index
       @exams = Exam.all
+      @taken_exams_ids = StudentAnswer.where(user_id: current_user.id).pluck(:exam_id).uniq
+    
+      @active_exams = @exams.select do |exam|
+        exam.active? && !exam.cancelled && exam.approved? && !@taken_exams_ids.include?(exam.id)
+      end
+    
+      @upcoming_exams = @exams.select do |exam|
+        exam.start_time > Time.now && !exam.cancelled && exam.approved? && !@taken_exams_ids.include?(exam.id)
+      end
+    
+      @missed_exams = @exams.select do |exam|
+        exam.end_time < Time.now && !exam.cancelled && exam.approved? && !@taken_exams_ids.include?(exam.id)
+      end
+    
+      @taken_exams_details = @exams.select { |exam| @taken_exams_ids.include?(exam.id) }
     end
+    
+
+    def review_student_exam
+      @student_answers = StudentAnswer.where(user_id: current_user.id, exam_id: @exam.id)
+    end
+    
+    
   
     def show
     end

@@ -15,19 +15,24 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: 'exams#index'
+    
     resources :exams do
       member do
         post 'approve'
         post 'cancel'
       end
-
+  
+      collection do
+        get 'reviewed_exams'
+      end
+  
       resources :questions
     end
-
+  
     resources :users, only: [:new, :create]
     resources :exam_outcomes, only: [:index, :show]
   end
-
+  
 
   namespace :teacher do
     root to: 'exams#index'
@@ -63,6 +68,7 @@ Rails.application.routes.draw do
         get 'take', to: 'exams#take'
         post 'next_question'
         post 'submit'
+        get 'review_student_exam'
       end
 
       resources :student_answers, only: [:create]

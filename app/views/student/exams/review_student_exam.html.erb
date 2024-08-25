@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>Review Your Answers for <%= @exam.title %></h2>
+
+  <% if @student_answers.present? %>
+    <% @student_answers.each do |answer| %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Question <%= answer.question_id %></h5>
+          <p><strong>Your Answer:</strong> <%= answer.answer %></p>
+          <p><strong>Marks Assigned:</strong> <%= answer.marks.present? ? answer.marks : 'Not yet assigned' %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <% total_marks = @student_answers.sum { |a| a.marks || 0 } %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Total Marks</h5>
+        <p><strong>Total Marks Obtained:</strong> <%= total_marks > 0 ? total_marks : 'Marks not assigned' %></p>
+      </div>
+    </div>
+  <% else %>
+    <p>No answers available for review.</p>
+  <% end %>
+
+  <%= link_to "Back", student_exams_path, class: 'btn btn-secondary' %>
+</div>

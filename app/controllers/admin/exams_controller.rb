@@ -51,10 +51,18 @@ module Admin
         redirect_to admin_exams_path, alert: 'Cannot cancel exam after it has started.'
       end
     end
+
+    def reviewed_exams
+      @reviewed_exams = Exam.joins(:student_answers)
+                            .where(student_answers: { reviewed: true })
+                            .select('Distinct exams.*, student_answers.user_id as student_id')
+    end
+    
+    
   
   
     def destroy
-      @exam.destroy
+    @exam.destroy
   
       redirect_to admin_exams_path, notice: 'Exam was successfully Deleted.'
     end

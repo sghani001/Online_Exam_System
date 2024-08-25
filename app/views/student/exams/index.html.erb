@@ -2,41 +2,61 @@
   <div class="row">
     <div class="col-md-4">
       <h3 class="text-success">Active Exams</h3>
-      <% @exams.each do |exam| %>
-        <% if exam.active? && !exam.cancelled && exam.approved? %>
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><%= exam.title %></h5>
-              <%= link_to 'Take Exam', take_student_exam_path(exam), class: 'btn btn-primary' %>
-            </div>
+      <% @active_exams.each do |exam| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= exam.title %></h5>
+            <%= link_to 'Take Exam', take_student_exam_path(exam), class: 'btn btn-primary' %>
           </div>
-        <% end %>
+        </div>
+      <% end %>
+      <% if @active_exams.empty? %>
+        <p>No active exams available.</p>
       <% end %>
     </div>
 
     <div class="col-md-4">
       <h3 class="text-warning">Upcoming Exams</h3>
-      <% @exams.each do |exam| %>
-        <% if exam.start_time > Time.now && !exam.cancelled && exam.approved? %>
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><%= exam.title %></h5>
-            </div>
+      <% @upcoming_exams.each do |exam| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= exam.title %></h5>
           </div>
-        <% end %>
+        </div>
+      <% end %>
+      <% if @upcoming_exams.empty? %>
+        <p>No upcoming exams available.</p>
       <% end %>
     </div>
 
     <div class="col-md-4">
       <h3 class="text-danger">Missed Exams</h3>
-      <% @exams.each do |exam| %>
-        <% if exam.end_time < Time.now && !exam.cancelled && exam.approved? %>
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><%= exam.title %></h5>
-            </div>
+      <% @missed_exams.each do |exam| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= exam.title %></h5>
           </div>
-        <% end %>
+        </div>
+      <% end %>
+      <% if @missed_exams.empty? %>
+        <p>No missed exams.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <h3>Exams Taken</h3>
+      <% @taken_exams_details.each do |exam| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= exam.title %></h5>
+            <%= link_to 'Review My Answers', review_student_exam_student_exam_path(exam), class: 'btn btn-secondary' %>
+          </div>
+        </div>
+      <% end %>
+      <% if @taken_exams_details.empty? %>
+        <p>No exams taken yet.</p>
       <% end %>
     </div>
   </div>

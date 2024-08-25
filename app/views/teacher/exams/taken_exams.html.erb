@@ -1,15 +1,55 @@
-<div class="container mt-10 row">
-  <% @taken_exams.each do |taken_exam| %>
-    <div class="col-md-4 mb-4">
-      <div class="card card_exam mb-3 h-100">
-        <div class="card-header bg-brown text-white">
-          <h5 class="card-title text-center"><%= taken_exam.exam_title %></h5>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-between">
-          <p class="card-text"><strong>Student:</strong> <%= taken_exam.student_name %></p>
-          <%= link_to 'Review Exam', review_exam_teacher_exam_path(taken_exam.exam_id), class: 'btn btn-primary mt-auto' %>
-        </div>
+<div class="container mt-10">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Exams to be Reviewed</h2>
+      <div class="row">
+        <% if @unreviewed_exams.any? %>
+          <% @unreviewed_exams.each do |exam| %>
+            <div class="col-md-4 mb-4">
+              <div class="card card_exam mb-3 h-100">
+                <div class="card-header bg-brown text-white">
+                  <h5 class="card-title text-center"><%= exam.exam_title %></h5>
+                </div>
+                <div class="card-body d-flex flex-column justify-content-between">
+                  <p class="card-text"><strong>Student:</strong> <%= exam.student_name %></p>
+                  <%= link_to 'Review Exam', review_exam_teacher_exam_path(exam.exam_id), class: 'btn btn-primary mt-auto' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="col-md-12">
+            <p class="text-center text-muted">No exams to review.</p>
+          </div>
+        <% end %>
       </div>
     </div>
-  <% end %>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <h2>Reviewed Exams</h2>
+      <div class="row">
+        <% if @reviewed_exams.any? %>
+          <% @reviewed_exams.each do |exam| %>
+            <div class="col-md-4 mb-4">
+              <div class="card card_exam mb-3 h-100">
+                <div class="card-header bg-brown text-white">
+                  <h5 class="card-title text-center"><%= exam.exam_title %></h5>
+                </div>
+                <div class="card-body d-flex flex-column justify-content-between">
+                  <p class="card-text"><strong>Student:</strong> <%= exam.student_name %></p>
+                  <%= link_to 'Review Exam', review_exam_teacher_exam_path(exam.exam_id), class: 'btn btn-secondary mt-auto' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="col-md-12">
+            <p class="text-center text-muted">No exams have been reviewed yet.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>

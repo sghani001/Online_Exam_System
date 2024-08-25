@@ -7,10 +7,15 @@ module Teacher
 
     
     def taken_exams
-      @taken_exams = StudentAnswer.joins(:exam, :user)
-                                  .where(exams: { teacher_id: current_user.id })
-                                  .select('DISTINCT exams.id AS exam_id, exams.title AS exam_title, users.name AS student_name')
+      @reviewed_exams = StudentAnswer.joins(:exam, :user)
+                                     .where(exams: { teacher_id: current_user.id }, reviewed: true)
+                                     .select('DISTINCT exams.id AS exam_id, exams.title AS exam_title, users.name AS student_name')
+    
+      @unreviewed_exams = StudentAnswer.joins(:exam, :user)
+                                       .where(exams: { teacher_id: current_user.id }, reviewed: false)
+                                       .select('DISTINCT exams.id AS exam_id, exams.title AS exam_title, users.name AS student_name')
     end
+    
     
 
     def review_exam
@@ -20,20 +25,33 @@ module Teacher
     def assign_marks
       @exam = Exam.find(params[:id])
       @students = User.where(id: StudentAnswer.where(exam_id: @exam.id).select(:user_id).distinct)
-      
+    
       @students.each do |student|
         total_marks = 0
+    
         StudentAnswer.where(exam_id: @exam.id, user_id: student.id).each do |answer|
           marks = params[:marks][answer.question_id.to_s].to_i
-          answer.update(marks: marks)
+          answer.update(marks: marks, reviewed: true)
           total_marks += marks
         end
-        
-        ExamOutcome.find_or_create_by(student_id: student.id, exam_id: @exam.id).update(score: total_marks)
+    
+        exam_outcome = ExamOutcome.find_or_create_by(student_id: student.id, exam_id: @exam.id)
+    
+        Rails.logger.debug "Student ID: #{student.id}, Total Marks: #{total_marks}, ExamOutcome ID: #{exam_outcome.id}"
+    
+        if exam_outcome.update(score: total_marks)
+          Rails.logger.debug "ExamOutcome updated successfully for Student ID: #{student.id} with Total Marks: #{total_marks}"
+        else
+          Rails.logger.error "Failed to update ExamOutcome for Student ID: #{student.id}. Errors: #{exam_outcome.errors.full_messages.join(', ')}"
+        end
       end
-  
-      redirect_to teacher_exams_path, notice: 'Marks assigned successfully'
+    
+      redirect_to taken_exams_teacher_exams_path, notice: 'Marks assigned successfully'
     end
+    
+    
+    
+    
     
     def index
       @exams = Exam.all
