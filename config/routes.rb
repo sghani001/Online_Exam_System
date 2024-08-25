@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       member do
         post 'approve'
         post 'cancel'
+        get  'review'
       end
   
       collection do

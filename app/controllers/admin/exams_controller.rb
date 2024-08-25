@@ -1,7 +1,7 @@
 module Admin
   class ExamsController < ApplicationController
 
-    before_action :set_exam, only: [:show, :edit, :update, :destroy, :approve, :cancel]
+    before_action :set_exam, only: [:show, :edit, :update, :destroy, :approve, :cancel, :review]
   
   
     
@@ -57,6 +57,16 @@ module Admin
                             .where(student_answers: { reviewed: true })
                             .select('Distinct exams.*, student_answers.user_id as student_id')
     end
+
+    def review
+      if @exam
+        @questions = @exam.questions.includes(:student_answers)
+        @student_answers = StudentAnswer.where(exam_id: @exam.id)
+      else
+        redirect_to admin_exams_path, alert: 'Exam not found.'
+      end
+    end
+    
     
     
   

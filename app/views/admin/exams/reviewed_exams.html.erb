@@ -1,16 +1,17 @@
 <div class="container">
-  <div class="row mt-5">
+  <div class="row mt-5 card">
     <div class="col-md-12">
       <h3>Reviewed Exams</h3>
 
       <% @reviewed_exams.group_by { |exam| User.find(exam.student_id) }.each do |student, exams| %>
         <% exams.each do |exam| %>
-          <div class="card mb-3">
+          <div class="card mb-3 card_exam ">
             <div class="card-body">
               <h5 class="card-title">Student: <%= student.name %></h5>
               <h6 class="card-subtitle mb-2 text-muted">Exam Title: <%= exam.title %></h6>
               <p class="card-text">Subject: <%= exam.subject %></p>
-                <%= link_to 'Review Answers', review_student_exam_student_exam_path(exam), class: 'btn btn-secondary' %>
+                <%= link_to 'Review Exam', review_admin_exam_path(exam), class: 'btn btn-success' %>
+
             </div>
           </div>
         <% end %>
@@ -21,4 +22,6 @@
       <% end %>
     </div>
   </div>
+  <br>
+    <%= link_to  "Back", admin_exams_path, class: 'btn btn-secondary' %>
 </div>

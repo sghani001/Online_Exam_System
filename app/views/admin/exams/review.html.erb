@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-12 card">
+      <h3>Review Exam: <%= @exam.title %></h3>
+      <p><strong>Subject:</strong> <%= @exam.subject %></p>
+      <p><strong>Description:</strong> <%= @exam.description %></p>
+      <p><strong>Start Time:</strong> <%= @exam.start_time %></p>
+      <p><strong>End Time:</strong> <%= @exam.end_time %></p>
+
+      <h4>Questions and Answers</h4>
+      <% @questions.each do |question| %>
+        <div class="card_exam mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Question: <%= question.content %></h5>
+            <p><strong>Type:</strong> <%= question.question_type %></p>
+            <% @student_answers.where(question_id: question.id).each do |answer| %>
+              <div class="border p-3 mb-2">
+                <p><strong>Student:</strong> <%= User.find(answer.user_id).name %></p>
+                <p><strong>Answer:</strong> <%= answer.answer %></p>
+                <p><strong>Marks:</strong> <%= answer.marks %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @questions.empty? %>
+        <p>No questions for this exam.</p>
+      <% end %>
+
+      <%# Calculate total marks %>
+      <h4>Total Marks</h4>
+      <p><strong>Total Marks Obtained:</strong> <%= @student_answers.sum(:marks) %></p>
+
+    </div>
+  </div>
+  <br>
+  <%= link_to "Back", reviewed_exams_admin_exams_path, class: 'btn btn-secondary' %>
+</div>
