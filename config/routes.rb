@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     root to: 'exams#index'  # Root path for students
     resources :exams, only: [:index, :show] do
       member do
-        get 'take', to: 'exams#take'
+        get 'take'
         post 'next_question'
         post 'submit'
         get 'review_student_exam'
