@@ -51,4 +51,5 @@
   </div>
 
   <%= link_to 'Add Question', new_teacher_exam_question_path(@exam), class: 'btn btn-success' if current_user.teacher? %>
+  <%= link_to  "Back", teacher_exams_path, class: 'btn btn-secondary' %>
 </div>
