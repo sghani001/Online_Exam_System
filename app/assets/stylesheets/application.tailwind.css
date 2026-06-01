@@ -1,0 +1,6 @@
+/* Import only Tailwind components and utilities (skip preflight/base to avoid resetting Bootstrap styles) */
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Keep existing custom styles after Tailwind so they can override when needed */
+@import "application.css";

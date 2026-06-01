@@ -59,6 +59,11 @@ module Teacher
   
     def show
     end
+
+    def live_monitor
+      # Show live progress for students on this exam
+      @students = User.where(user_type: 'student')
+    end
   
     def new
       @exam = Exam.new

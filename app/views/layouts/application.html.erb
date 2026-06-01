@@ -7,45 +7,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <!-- Bootstrap CSS (restore for existing layout) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Tailwind and custom styles (Tailwind first so custom CSS can override) -->
+  <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <%= link_to image_tag('logo.png', alt: 'Your Logo', class: 'navbar-logo'), root_path %>
-      <a class="navbar-brand" href="#">Online Exam System</a>
+<body class="app-body">
+  <nav class="navbar navbar-expand-lg app-navbar bg-white/90 shadow-sm sticky top-0 z-30">
+    <div class="container-fluid app-shell px-4 md:px-6 flex items-center justify-between">
+      <%= link_to "#{image_tag("logo.png", alt: "Online Exam System", class: "navbar-logo")}<span class='hidden sm:inline-block ml-2 text-lg font-extrabold'>Online Exam System</span>".html_safe, root_path, class: "navbar-brand app-brand flex items-center" %>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav app-nav-links me-auto mb-2 mb-lg-0 flex space-x-2">
           <li class="nav-item">
-            <%= link_to 'Home', root_path, class: 'nav-link' %>
+            <%= link_to "Home", root_path, class: "nav-link text-gray-600 hover:text-blue-600" %>
           </li>
+
           <% if user_signed_in? %>
             <li class="nav-item">
-              <%= link_to 'Edit Profile', edit_user_registration_path, class: 'nav-link' %>
+              <%= link_to "Edit Profile", edit_user_registration_path, class: "nav-link text-gray-600 hover:text-blue-600" %>
             </li>
+
             <% if current_user.admin? %>
               <li class="nav-item">
-                <%= link_to 'Register new User', new_user_registration_path, class: 'nav-link' %>
+                <%= link_to "Register User", new_user_registration_path, class: "nav-link text-gray-600 hover:text-blue-600" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Reviewed Exams", reviewed_exams_admin_exams_path, class: "nav-link text-gray-600 hover:text-blue-600" %>
               </li>
             <% end %>
-            <%if current_user.teacher? %>]
-              <%= link_to 'Taken Exams', taken_exams_teacher_exams_path, class: 'nav-link' %>
-            <%end%>
-             <%if current_user.admin? %>]
-              <%= link_to 'Reviewed Exams', reviewed_exams_admin_exams_path, class: 'nav-link' %>
-            <%end%>
+
+            <% if current_user.teacher? %>
+              <li class="nav-item">
+                <%= link_to "Taken Exams", taken_exams_teacher_exams_path, class: "nav-link text-gray-600 hover:text-blue-600" %>
+              </li>
+            <% end %>
           <% end %>
         </ul>
+
         <% if user_signed_in? %>
-          <ul class="navbar-nav">
+          <ul class="navbar-nav app-user-menu flex items-center gap-3">
+            <li class="nav-item app-user-chip bg-white border border-gray-200 rounded-full px-3 py-2 shadow-sm">
+              <span class="block font-semibold"><%= current_user.name.presence || current_user.email %></span>
+              <small class="text-xs text-gray-500"><%= current_user.user_type %></small>
+            </li>
             <li class="nav-item">
-              <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+              <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link app-logout-link text-red-600" %>
             </li>
           </ul>
         <% end %>
@@ -53,37 +67,37 @@
     </div>
   </nav>
 
-  <div class="container my-4">
-    <% if user_signed_in? %>
-      <h1>Welcome to Online Exam System, <%= current_user.name.upcase %>!</h1>
-    <% end %>
-    
-    <div class="row align-items-center">
-      <div class="col-md-8">
-        <% if notice %>
-          <p class="notice alert alert-success"><%= notice %></p>
-        <% end %>
-        <% if alert %>
-          <p class="alert alert-danger"><%= alert %></p>
-        <% end %>
-      </div>
-      <div class="col-md-4 d-flex justify-content-end">
-        <% if user_signed_in? && current_user.student? %>
-          <% profile_picture = current_user.profile_picture.attached? ? current_user.profile_picture : 'default.png' %>
-          <%= image_tag(profile_picture, class: 'img-thumbnail', style: 'height: 100px; width: 100px; object-fit: cover; border: 2px solid #ccc;') %>
-        <% end %>
+  <main class="app-main">
+    <div class="app-shell">
+      <% if user_signed_in? %>
+        <section class="page-hero bg-white rounded-lg p-6 mb-6 shadow flex items-center justify-between">
+          <div>
+            <p class="eyebrow text-sm text-indigo-600 font-bold"><%= current_user.user_type %> workspace</p>
+            <h1 class="text-3xl font-extrabold">Welcome back, <%= current_user.name.presence || current_user.email %></h1>
+          </div>
 
-      </div>
-    </div>
+          <% if current_user.student? %>
+            <% profile_picture = current_user.profile_picture.attached? ? current_user.profile_picture : "default.png" %>
+            <%= image_tag(profile_picture, class: "profile-avatar w-20 h-20 rounded-lg border-4 border-white shadow-lg") %>
+          <% end %>
+        </section>
+      <% end %>
 
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+      <% if notice %>
+        <p class="app-alert app-alert-success"><%= notice %></p>
+      <% end %>
+
+      <% if alert %>
+        <p class="app-alert app-alert-danger"><%= alert %></p>
+      <% end %>
+
       <%= yield %>
     </div>
-  </div>
+  </main>
 
-  <footer class="footer mt-auto py-3 bg-dark text-white">
-    <div class="container text-center">
-      <span class="text-muted">© 2024 Online Exam System</span>
+  <footer class="app-footer">
+    <div class="app-shell">
+      <span>© 2026 Online Exam System</span>
     </div>
   </footer>
 

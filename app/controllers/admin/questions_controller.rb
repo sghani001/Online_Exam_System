@@ -51,7 +51,7 @@ module Admin
   
   
     def question_params
-      params.require(:question).permit(:content, :question_type, options: {})
+      params.require(:question).permit(:content, :question_type, :correct_answer, options: {})
     end
   end
   

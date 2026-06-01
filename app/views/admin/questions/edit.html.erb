@@ -33,6 +33,17 @@
         <%= form.text_field :option_3, class: "form-control", value: @question.options['option_3'] %>
       </div>
     <% end %>
+      <% if @question.question_type == 'multiple_choice' %>
+        <div class="mb-3">
+          <%= form.label :correct_answer, "Correct Answer", class: "form-label" %>
+          <%= form.select :correct_answer, [['Option 1', 'option_1'], ['Option 2', 'option_2'], ['Option 3', 'option_3']], { selected: @question.correct_answer }, class: "form-select" %>
+        </div>
+      <% else %>
+        <div class="mb-3">
+          <%= form.label :correct_answer, "Correct Answer", class: "form-label" %>
+          <%= form.text_field :correct_answer, class: "form-control", value: @question.correct_answer %>
+        </div>
+      <% end %>
 
     <div class="d-flex justify-content-between">
       <%= form.submit 'Update Question', class: "btn btn-primary" %>

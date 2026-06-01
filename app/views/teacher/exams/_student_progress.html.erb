@@ -1,0 +1,12 @@
+<div id="student_progress_<%= user.id %>_<%= exam.id %>" class="student-progress-row panel-card" style="margin-bottom:0.6rem; padding:0.8rem;">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <strong><%= user.name.presence || user.email %></strong>
+      <div style="color: #6b7280; font-weight:700; font-size:0.85rem;">Question: <%= current_question_index %> / <%= total_questions %></div>
+    </div>
+    <div style="text-align:right;">
+      <div id="student_timer_<%= user.id %>_<%= exam.id %>">--:--</div>
+      <small style="color:#6b7280;">Status: <span class="status-pill status-active">In progress</span></small>
+    </div>
+  </div>
+</div>

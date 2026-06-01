@@ -1,11 +1,36 @@
-<div class="container mt-10">
-  <h3>All Exams</h3>
-  <%= link_to  "Create New Exam", new_teacher_exam_path , class: 'btn btn-primary mb-4'%>
-  <div class="row">
-    <% @exams.each do |exam| %>
-      <div class="col-md-4 mb-4">
-        <%= render 'teacher/exams/teacher_admin_exam', exam: exam %>
-      </div>
-    <% end %>
+<section class="dashboard-header">
+  <div>
+    <h2>All Exams</h2>
+    <p>Create, submit, and manage exams from one workspace.</p>
   </div>
-</div>
+  <%= link_to "Create New Exam", new_teacher_exam_path, class: "btn btn-primary" %>
+</section>
+
+<section class="stats-grid">
+  <div class="metric-card">
+    <span>Total Exams</span>
+    <strong><%= @exams.count %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Approved</span>
+    <strong><%= @exams.count(&:approved?) %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Active Now</span>
+    <strong><%= @exams.count { |exam| exam.active? && exam.approved? && !exam.cancelled? } %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Awaiting Approval</span>
+    <strong><%= @exams.count { |exam| exam.request_approval? && !exam.approved? && !exam.cancelled? } %></strong>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  <% @exams.each do |exam| %>
+    <%= render "teacher/exams/teacher_admin_exam", exam: exam %>
+  <% end %>
+</section>
+
+<% if @exams.empty? %>
+  <div class="empty-state">No exams have been created yet.</div>
+<% end %>

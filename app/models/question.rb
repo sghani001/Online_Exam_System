@@ -6,6 +6,7 @@ class Question < ApplicationRecord
   validates :content, presence: { message: "can't be blank" }
   validates :question_type, inclusion: { in: %w[multiple_choice short_answer] }
   validate :validate_options_for_multiple_choice
+  validates :correct_answer, presence: true
 
   private
 

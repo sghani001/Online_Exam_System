@@ -1,0 +1,14 @@
+<div class="exam-progress-card panel-card">
+  <div class="panel-title">
+    <h3>Progress</h3>
+    <div>
+      <small class="text-muted">Question</small>
+      <strong><%= current_question_index + 1 %> / <%= total_questions %></strong>
+    </div>
+  </div>
+
+  <div class="exam-timer">
+    <small class="text-muted">Time Remaining</small>
+    <div class="exam-timer-value" id="exam_timer_value_<%= exam.id %>" data-submit-url="<%= submit_student_exam_path(exam) %>">--:--</div>
+  </div>
+</div>

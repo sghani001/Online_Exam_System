@@ -1,63 +1,134 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-4">
-      <h3 class="text-success">Active Exams</h3>
-      <% @active_exams.each do |exam| %>
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title"><%= exam.title %></h5>
-            <%= link_to 'Take Exam', take_student_exam_path(exam), class: 'btn btn-primary' %>
-          </div>
-        </div>
-      <% end %>
-      <% if @active_exams.empty? %>
-        <p>No active exams available.</p>
-      <% end %>
+<section class="dashboard-header flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+  <div>
+    <h2 class="text-2xl font-extrabold">Student Exams</h2>
+    <p class="text-gray-600 mt-1">See what is live now, what is coming soon, and what you have already completed.</p>
+  </div>
+</section>
+
+<section class="stats-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+  <div class="metric-card bg-white p-4 rounded-lg shadow-sm flex flex-col">
+    <span class="text-xs text-gray-500 uppercase font-semibold">Active</span>
+    <strong class="text-2xl font-extrabold mt-2"><%= @active_exams.count %></strong>
+  </div>
+  <div class="metric-card bg-white p-4 rounded-lg shadow-sm flex flex-col">
+    <span class="text-xs text-gray-500 uppercase font-semibold">Upcoming</span>
+    <strong class="text-2xl font-extrabold mt-2"><%= @upcoming_exams.count %></strong>
+  </div>
+  <div class="metric-card bg-white p-4 rounded-lg shadow-sm flex flex-col">
+    <span class="text-xs text-gray-500 uppercase font-semibold">Completed</span>
+    <strong class="text-2xl font-extrabold mt-2"><%= @taken_exams_details.count %></strong>
+  </div>
+  <div class="metric-card bg-white p-4 rounded-lg shadow-sm flex flex-col">
+    <span class="text-xs text-gray-500 uppercase font-semibold">Missed</span>
+    <strong class="text-2xl font-extrabold mt-2"><%= @missed_exams.count %></strong>
+  </div>
+</section>
+
+<section class="dashboard-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="panel-card bg-white p-4 rounded-lg shadow">
+    <div class="panel-title flex items-center justify-between mb-3">
+      <h3 class="text-lg font-bold">Active Exams</h3>
+      <span class="status-pill status-active inline-block bg-green-50 text-green-700 px-2 py-1 rounded-full"><%= @active_exams.count %></span>
     </div>
 
-    <div class="col-md-4">
-      <h3 class="text-warning">Upcoming Exams</h3>
-      <% @upcoming_exams.each do |exam| %>
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title"><%= exam.title %></h5>
+    <% @active_exams.each do |exam| %>
+      <article class="exam-card mb-3 bg-white rounded-lg shadow-sm hover:shadow-md transition p-4">
+        <div class="exam-card-header flex items-start justify-between">
+          <div>
+            <span class="status-pill status-active inline-block px-2 py-1 rounded-full bg-green-50 text-green-700 font-semibold">Ready</span>
+            <h5 class="text-xl font-extrabold mt-2"><%= exam.title %></h5>
+          </div>
+          <div class="text-right text-sm text-gray-600">
+            <div class="uppercase text-xs font-bold">Ends</div>
+            <div class="mt-2 font-bold"><%= exam.end_time.strftime("%Y-%m-%d %H:%M") %></div>
           </div>
         </div>
-      <% end %>
-      <% if @upcoming_exams.empty? %>
-        <p>No upcoming exams available.</p>
-      <% end %>
-    </div>
+        <div class="exam-card-actions mt-3">
+          <%= link_to "Take Exam", take_student_exam_path(exam), class: "btn btn-primary btn-sm inline-flex items-center px-3 py-1.5 rounded-md" %>
+        </div>
+      </article>
+    <% end %>
 
-    <div class="col-md-4">
-      <h3 class="text-danger">Missed Exams</h3>
-      <% @missed_exams.each do |exam| %>
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title"><%= exam.title %></h5>
-          </div>
-        </div>
-      <% end %>
-      <% if @missed_exams.empty? %>
-        <p>No missed exams.</p>
-      <% end %>
-    </div>
+    <% if @active_exams.empty? %>
+      <div class="empty-state p-4 border-dashed border rounded">No active exams available.</div>
+    <% end %>
   </div>
 
-  <div class="row mt-5">
-    <div class="col-md-12">
-      <h3>Exams Taken</h3>
-      <% @taken_exams_details.each do |exam| %>
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title"><%= exam.title %></h5>
-            <%= link_to 'Review My Answers', review_student_exam_student_exam_path(exam), class: 'btn btn-secondary' %>
+  <div class="panel-card bg-white p-4 rounded-lg shadow">
+    <div class="panel-title flex items-center justify-between mb-3">
+      <h3 class="text-lg font-bold">Upcoming</h3>
+      <span class="status-pill status-upcoming inline-block bg-yellow-50 text-yellow-800 px-2 py-1 rounded-full"><%= @upcoming_exams.count %></span>
+    </div>
+
+    <% @upcoming_exams.each do |exam| %>
+      <article class="exam-card mb-3 bg-white rounded-lg shadow-sm p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="status-pill status-upcoming inline-block px-2 py-1 rounded-full bg-yellow-50 text-yellow-800 font-semibold">Scheduled</span>
+            <h5 class="text-xl font-extrabold mt-2"><%= exam.title %></h5>
+          </div>
+          <div class="text-right text-sm text-gray-600">
+            <div class="uppercase text-xs font-bold">Starts</div>
+            <div class="mt-2 font-bold"><%= exam.start_time.strftime("%Y-%m-%d %H:%M") %></div>
           </div>
         </div>
-      <% end %>
-      <% if @taken_exams_details.empty? %>
-        <p>No exams taken yet.</p>
-      <% end %>
-    </div>
+      </article>
+    <% end %>
+
+    <% if @upcoming_exams.empty? %>
+      <div class="empty-state p-4 border-dashed border rounded">No upcoming exams available.</div>
+    <% end %>
   </div>
-</div>
+
+  <div class="panel-card bg-white p-4 rounded-lg shadow">
+    <div class="panel-title flex items-center justify-between mb-3">
+      <h3 class="text-lg font-bold">Missed</h3>
+      <span class="status-pill status-missed inline-block bg-red-50 text-red-700 px-2 py-1 rounded-full"><%= @missed_exams.count %></span>
+    </div>
+
+    <% @missed_exams.each do |exam| %>
+      <article class="exam-card mb-3 bg-white rounded-lg shadow-sm p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="status-pill status-missed inline-block px-2 py-1 rounded-full bg-red-50 text-red-700 font-semibold">Closed</span>
+            <h5 class="text-xl font-extrabold mt-2"><%= exam.title %></h5>
+          </div>
+          <div class="text-right text-sm text-gray-600">
+            <div class="uppercase text-xs font-bold">Ended</div>
+            <div class="mt-2 font-bold"><%= exam.end_time.strftime("%Y-%m-%d %H:%M") %></div>
+          </div>
+        </div>
+      </article>
+    <% end %>
+
+    <% if @missed_exams.empty? %>
+      <div class="empty-state p-4 border-dashed border rounded">No missed exams.</div>
+    <% end %>
+  </div>
+  </div>
+</section>
+
+<section class="panel-card mt-4 bg-white p-4 rounded-lg shadow">
+  <div class="panel-title flex items-center justify-between mb-3">
+    <h3 class="text-lg font-bold">Exams Taken</h3>
+    <span class="status-pill status-reviewed inline-block bg-teal-50 text-teal-700 px-2 py-1 rounded-full"><%= @taken_exams_details.count %></span>
+  </div>
+
+  <div class="dashboard-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+    <% @taken_exams_details.each do |exam| %>
+      <article class="exam-card bg-white rounded-lg shadow-sm p-3">
+        <div class="exam-card-header mb-2">
+          <span class="status-pill status-reviewed inline-block text-sm mr-2">Completed</span>
+          <h5 class="text-md font-extrabold"><%= exam.title %></h5>
+        </div>
+        <div class="exam-card-actions">
+          <%= link_to "Review My Answers", review_student_exam_student_exam_path(exam), class: "btn btn-outline-primary btn-sm" %>
+        </div>
+      </article>
+    <% end %>
+  </div>
+
+  <% if @taken_exams_details.empty? %>
+    <div class="empty-state">No exams taken yet.</div>
+  <% end %>
+</section>

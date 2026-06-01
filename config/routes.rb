@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         post 'cancel'
         post 'request_approval'
         post 'submit'
+        get 'live_monitor'
         get 'review_exam'
         post 'assign_marks'
       end

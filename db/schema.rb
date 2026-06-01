@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_25_132940) do
+ActiveRecord::Schema[7.0].define(version: 2026_06_01_000000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_25_132940) do
     t.boolean "request_approval"
   end
 
+  create_table "persona_events", force: :cascade do |t|
+    t.string "trackable_type", null: false
+    t.integer "trackable_id", null: false
+    t.string "action", null: false
+    t.text "metadata", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action"], name: "index_persona_events_on_action"
+    t.index ["created_at"], name: "index_persona_events_on_created_at"
+    t.index ["trackable_type", "trackable_id", "action"], name: "index_persona_events_on_trackable_and_action"
+    t.index ["trackable_type", "trackable_id"], name: "index_persona_events_on_trackable"
+  end
+
   create_table "questions", force: :cascade do |t|
     t.text "content"
     t.string "question_type"
@@ -70,6 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_25_132940) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "options", default: {}
+    t.string "correct_answer"
     t.index ["exam_id"], name: "index_questions_on_exam_id"
   end
 
@@ -79,6 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_25_132940) do
     t.text "answer"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "question_type"
     t.integer "exam_id", null: false
     t.float "marks"
     t.boolean "reviewed", default: false

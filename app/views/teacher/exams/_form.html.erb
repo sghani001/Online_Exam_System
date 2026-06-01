@@ -1,18 +1,21 @@
-<div class="card mb-4">
-  <div class="card-header">
-    <h5 class="card-title"><%= @exam.persisted? ? 'Edit Exam' : 'New Exam' %></h5>
+<section class="form-page">
+  <div class="dashboard-header">
+    <div>
+      <h2><%= @exam.persisted? ? "Edit Exam" : "Create Exam" %></h2>
+      <p><%= @exam.persisted? ? "Update the exam schedule and details." : "Build a new assessment for your students." %></p>
+    </div>
   </div>
-  <div class="card-body">
-    <%= form_with(model: @exam, 
-                  url: (@exam.persisted? ? teacher_exam_path(@exam) : teacher_exams_path), 
-                  method: (@exam.persisted? ? :patch : :post), 
-                  local: true, 
-                  class: "mb-4") do |form| %>
-      
+
+  <div class="panel-card form-card">
+    <%= form_with(model: @exam,
+                  url: (@exam.persisted? ? teacher_exam_path(@exam) : teacher_exams_path),
+                  method: (@exam.persisted? ? :patch : :post),
+                  local: true) do |form| %>
+
       <% if @exam.errors.any? %>
-        <div id="error_explanation" class="alert alert-danger">
-          <h4><%= pluralize(@exam.errors.count, "error") %> prohibited this exam from being saved:</h4>
-          <ul class="list-unstyled">
+        <div id="error_explanation" class="app-alert app-alert-danger">
+          <strong><%= pluralize(@exam.errors.count, "error") %> stopped this exam from being saved.</strong>
+          <ul class="mb-0 mt-2">
             <% @exam.errors.full_messages.each do |message| %>
               <li><%= message %></li>
             <% end %>
@@ -20,35 +23,39 @@
         </div>
       <% end %>
 
-      <div class="mb-3">
-        <%= form.label :title, class: "form-label" %>
-        <%= form.text_field :title, id: :title, class: "form-control" %>
-      </div>
+      <div class="form-grid">
+        <div class="mb-3">
+          <%= form.label :title, class: "form-label" %>
+          <%= form.text_field :title, id: :title, class: "form-control" %>
+        </div>
 
-      <div class="mb-3">
-        <%= form.label :subject, class: "form-label" %>
-        <%= form.text_field :subject, id: :subject, class: "form-control" %>
+        <div class="mb-3">
+          <%= form.label :subject, class: "form-label" %>
+          <%= form.text_field :subject, id: :subject, class: "form-control" %>
+        </div>
       </div>
 
       <div class="mb-3">
         <%= form.label :description, class: "form-label" %>
-        <%= form.text_area :description, id: :description, class: "form-control" %>
+        <%= form.text_area :description, id: :description, rows: 5, class: "form-control" %>
       </div>
 
-      <div class="mb-3">
-        <%= form.label :start_time, class: "form-label" %>
-        <%= form.datetime_select :start_time, id: :start_time, class: "form-control" %>
+      <div class="form-grid">
+        <div class="mb-3 date-select-group">
+          <%= form.label :start_time, class: "form-label" %>
+          <%= form.datetime_select :start_time, {}, class: "form-select" %>
+        </div>
+
+        <div class="mb-3 date-select-group">
+          <%= form.label :end_time, class: "form-label" %>
+          <%= form.datetime_select :end_time, {}, class: "form-select" %>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <%= form.label :end_time, class: "form-label" %>
-        <%= form.datetime_select :end_time, id: :end_time, class: "form-control" %>
-      </div>
-
-      <div class="d-flex justify-content-between">
-        <%= form.submit @exam.persisted? ? 'Update Exam' : 'Create Exam', class: "btn btn-primary" %>
-        <%= link_to 'Back', teacher_exams_path, class: "btn btn-secondary" %>
+      <div class="form-actions">
+        <%= link_to "Back", teacher_exams_path, class: "btn btn-outline-secondary" %>
+        <%= form.submit @exam.persisted? ? "Update Exam" : "Create Exam", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
-</div>
+</section>

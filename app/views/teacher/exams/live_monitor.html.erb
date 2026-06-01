@@ -1,0 +1,15 @@
+<h2>Live Monitor — <%= @exam.title %></h2>
+
+<%= turbo_stream_from "exam_#{@exam.id}" %>
+
+<div class="panel-card">
+  <div class="panel-title">
+    <h3>Students</h3>
+  </div>
+
+  <div id="exam_students_list">
+    <% @students.each do |student| %>
+      <%= render partial: 'student/progress', locals: { user: student, exam: @exam, current_question_index: StudentAnswer.where(user_id: student.id, exam_id: @exam.id).count, total_questions: @exam.questions.count } %>
+    <% end %>
+  </div>
+</div>

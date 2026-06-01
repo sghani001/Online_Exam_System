@@ -1,29 +1,43 @@
-<%= form_with(url: next_question_student_exam_path(@exam, index: @current_question_index), method: :post, local: true, html: { id: 'question-form', class: 'form-container' }) do |form| %>
-  <div class="card mb-4 p-4 shadow-sm">
-    <h3 class="card-title mb-3"><%= @question.content %></h3>
+<section class="exam-taking-shell max-w-3xl mx-auto">
+  <div class="exam-taking-header flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow-sm">
+    <div>
+      <p class="eyebrow text-sm text-indigo-600 font-bold"><%= @exam.title %></p>
+      <h2 class="text-2xl font-extrabold">Question <%= @current_question_index + 1 %> of <%= @exam.questions.count %></h2>
+    </div>
+    <span class="status-pill status-active inline-block px-3 py-1 rounded-full bg-green-50 text-green-700 font-semibold">In progress</span>
+  </div>
 
-    <% if @question.question_type == 'multiple_choice' %>
-      <div class="form-group">
+  <%= turbo_stream_from "exam_#{@exam.id}_user_#{current_user.id}" if current_user %>
+
+  <div id="exam_progress_<%= current_user.id %>_<%= @exam.id %>" data-controller="exam-timer" data-exam-timer-end-time-value="<%= @exam.end_time.iso8601 if @exam.end_time %>">
+    <%= render partial: 'student/exams/exam_progress', locals: { current_question_index: @current_question_index, total_questions: @exam.questions.count, exam: @exam } %>
+  </div>
+
+  <%= form_with(url: next_question_student_exam_path(@exam, index: @current_question_index), method: :post, local: true, html: { id: "question-form", class: "question-card bg-white p-6 rounded-lg shadow" }) do |form| %>
+    <h3 class="text-xl font-black mb-4"><%= @question.content %></h3>
+
+    <% if @question.question_type == "multiple_choice" %>
+      <div class="answer-options grid gap-3">
         <% @question.options.each_with_index do |(key, value), index| %>
-          <div class="form-check mb-2">
-            <%= form.radio_button :student_answer, key, id: "option_#{index}", class: 'form-check-input' %>
-            <%= form.label "option_#{index}", key, class: 'form-check-label' %>
-          </div>
+          <label class="answer-option flex items-center gap-3 p-3 border rounded-lg hover:shadow-sm cursor-pointer" for="option_<%= index %>">
+            <%= form.radio_button :student_answer, key, id: "option_#{index}", class: "form-check-input" %>
+            <span class="text-gray-800 font-bold"><%= value %></span>
+          </label>
         <% end %>
       </div>
-    <% elsif @question.question_type == 'short_answer' %>
-      <div class="form-group">
-        <%= form.label :student_answer, "Your Answer", class: 'form-label' %>
-        <%= form.text_field :student_answer, class: 'form-control' %>
+    <% elsif @question.question_type == "short_answer" %>
+      <div class="form-group mb-4">
+        <%= form.label :student_answer, "Your Answer", class: "form-label block text-sm font-semibold mb-2" %>
+        <%= form.text_field :student_answer, class: "form-control w-full p-3 border rounded" %>
       </div>
     <% end %>
 
     <%= form.hidden_field :question_id, value: @question.id %>
     <%= form.hidden_field :index, value: @current_question_index %>
 
-    <div class="d-flex justify-content-between mt-4">
-      <%= form.submit "Next Question", id: "submit-button", class: 'btn btn-primary' %>
+    <div class="form-actions flex items-center justify-between mt-6">
+      <%= link_to "Back to Exams", student_exams_path, class: "btn btn-outline-secondary" %>
+      <%= form.submit "Next Question", id: "submit-button", class: "btn btn-primary inline-flex items-center px-4 py-2 rounded-md" %>
     </div>
-  </div>
-<% end %>
-
+  <% end %>
+</section>

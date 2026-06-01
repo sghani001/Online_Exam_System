@@ -1,37 +1,43 @@
-<div class="card_exam mb-3">
-  <% header_class = if exam.cancelled?
-                      'bg-brown text-white'
-                    elsif exam.start_time < Time.now && exam.end_time < Time.now
-                      'bg-black text-white'
-                    elsif exam.active? && exam.approved?
-                      'bg-red text-white'
-                    elsif exam.approved?
-                      'bg-green text-white'
-                    elsif exam.request_approval?
-                      'bg-yellow text-dark'
-                    else
-                      'bg-blue text-dark'
-                    end %>
+<% status_label, status_class =
+  if exam.cancelled?
+    ["Cancelled", "status-cancelled"]
+  elsif exam.start_time < Time.current && exam.end_time < Time.current
+    ["Missed", "status-missed"]
+  elsif exam.active? && exam.approved?
+    ["Active", "status-active"]
+  elsif exam.approved?
+    ["Approved", "status-approved"]
+  elsif exam.request_approval?
+    ["Requested approval", "status-requested"]
+  else
+    ["Draft", "status-draft"]
+  end %>
 
-  <div class="card-header <%= header_class %>">
-    <h5 class="card-title"><%= exam.title %></h5>
+<article class="exam-card">
+  <div class="exam-card-header">
+    <span class="status-pill <%= status_class %>"><%= status_label %></span>
+    <h5><%= exam.title %></h5>
   </div>
-  <div class="card-body">
-    <p class="card-text">
-      <strong>Start Time:</strong> <%= exam.start_time.strftime("%Y-%m-%d %H:%M") %><br>
-      <strong>End Time:</strong> <%= exam.end_time.strftime("%Y-%m-%d %H:%M") %><br>
-      <%= content_tag(:span, "Approved", class: "text-success") if exam.approved? %>
-      <%= content_tag(:span, "Cancelled", class: "text-brown") if exam.cancelled? %>
-      <%= content_tag(:span, "Active", class: "text-red") if exam.active? %>
-      <%= content_tag(:span, "Requested Approval", class: "text-dark-green") if (exam.request_approval? && !exam.cancelled? && !exam.approved?) %>
+
+  <div class="exam-card-body">
+    <p class="exam-meta">
+      <span>Subject</span>
+      <strong><%= exam.subject.presence || "Not specified" %></strong>
+      <span>Start time</span>
+      <strong><%= exam.start_time.strftime("%Y-%m-%d %H:%M") %></strong>
+      <span>End time</span>
+      <strong><%= exam.end_time.strftime("%Y-%m-%d %H:%M") %></strong>
     </p>
   </div>
-  <div class="card-footer d-flex justify-content-between flex-wrap">
+
+  <div class="exam-card-actions">
     <% unless exam.cancelled? %>
-      <%= link_to 'Cancel Exam', cancel_admin_exam_path(exam), class: 'btn btn-warning flex-grow-1 mx-1', data: { turbo_method: 'post' } %>
+      <%= link_to "Cancel", cancel_admin_exam_path(exam), class: "btn btn-outline-warning btn-sm", data: { turbo_method: "post" } %>
     <% end %>
-    <%= link_to 'Approve', approve_admin_exam_path(exam), class: 'btn btn-secondary flex-grow-1 mx-1', data: { turbo_method: 'post' } if !exam.approved && exam.request_approval %>
-    <%= link_to 'Delete', admin_exam_path(exam), class: 'btn btn-danger flex-grow-1 mx-1', data: { turbo_method: :delete } %>
-    <%= link_to 'Show Exam', admin_exam_path(exam), class: 'btn btn-primary flex-grow-1 mx-1' %>
+    <% if !exam.approved && exam.request_approval %>
+      <%= link_to "Approve", approve_admin_exam_path(exam), class: "btn btn-outline-success btn-sm", data: { turbo_method: "post" } %>
+    <% end %>
+    <%= link_to "Delete", admin_exam_path(exam), class: "btn btn-outline-danger btn-sm", data: { turbo_method: :delete } %>
+    <%= link_to "Show Exam", admin_exam_path(exam), class: "btn btn-primary btn-sm" %>
   </div>
-</div>
+</article>

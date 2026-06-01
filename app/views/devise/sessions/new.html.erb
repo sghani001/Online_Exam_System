@@ -1,39 +1,60 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header bg-success text-white">
-          Log in
-        </div>
-        <div class="card-body">
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <%= render "devise/shared/error_messages", resource: resource %>
+<section class="auth-stage">
+  <div class="auth-showcase">
+    <div class="auth-logo-lockup">
+      <%= image_tag("logo.png", alt: "Online Exam System") %>
+      <span>Online Exam System</span>
+    </div>
 
-            <div class="form-group">
-              <%= f.label :email %>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
-            </div>
+    <div class="auth-showcase-copy">
+      <p class="eyebrow">Secure exam workspace</p>
+      <h1>Focused assessments for every role.</h1>
+    </div>
 
-            <div class="form-group">
-              <%= f.label :password %>
-              <%= f.password_field :password, autocomplete: "current-password", class: 'form-control' %>
-            </div>
-
-            <% if devise_mapping.rememberable? %>
-              <div class="form-check">
-                <%= f.check_box :remember_me, class: 'form-check-input' %>
-                <%= f.label :remember_me, class: 'form-check-label' %>
-              </div>
-            <% end %>
-
-            <div class="form-group text-center">
-              <%= f.submit "Log in", class: 'btn btn-primary' %>
-            </div>
-          <% end %>
-
-          <%= render "devise/shared/links" %>
-        </div>
+    <div class="auth-metrics">
+      <div>
+        <strong>3</strong>
+        <span>Roles</span>
+      </div>
+      <div>
+        <strong>24/7</strong>
+        <span>Access</span>
+      </div>
+      <div>
+        <strong>100%</strong>
+        <span>Owned data</span>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="auth-card">
+    <p class="eyebrow">Welcome back</p>
+    <h2>Log in to your account</h2>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="form-group">
+        <%= f.label :email, class: "form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="form-check mb-3">
+          <%= f.check_box :remember_me, class: "form-check-input" %>
+          <%= f.label :remember_me, class: "form-check-label" %>
+        </div>
+      <% end %>
+
+      <%= f.submit "Log in", class: "btn btn-primary btn-lg w-100" %>
+    <% end %>
+
+    <div class="mt-3">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</section>

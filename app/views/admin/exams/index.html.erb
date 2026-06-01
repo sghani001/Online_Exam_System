@@ -1,10 +1,35 @@
-<div class="container mt-10">
-  <h3>All Exams</h3>
-  <div class="row">
-    <% @exams.each do |exam| %>
-      <div class="col-md-4 mb-4">
-        <%= render 'admin/exams/teacher_admin_exam', exam: exam %>
-      </div>
-    <% end %>
+<section class="dashboard-header">
+  <div>
+    <h2>Exam Approval Queue</h2>
+    <p>Review submitted exams, approve ready assessments, and manage exceptions.</p>
   </div>
-</div>
+</section>
+
+<section class="stats-grid">
+  <div class="metric-card">
+    <span>Total Exams</span>
+    <strong><%= @exams.count %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Requests</span>
+    <strong><%= @exams.count { |exam| exam.request_approval? && !exam.approved? && !exam.cancelled? } %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Approved</span>
+    <strong><%= @exams.count(&:approved?) %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Cancelled</span>
+    <strong><%= @exams.count(&:cancelled?) %></strong>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  <% @exams.each do |exam| %>
+    <%= render "admin/exams/teacher_admin_exam", exam: exam %>
+  <% end %>
+</section>
+
+<% if @exams.empty? %>
+  <div class="empty-state">There are no exams to review.</div>
+<% end %>

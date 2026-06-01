@@ -1,55 +1,62 @@
-<div class="container mt-4">
-  <h1 class="mb-4">Exam Details</h1>
+<section class="dashboard-header">
+  <div>
+    <h2><%= @exam.title %></h2>
+    <p><%= @exam.description %></p>
+  </div>
+  <div class="header-actions">
+    <%= link_to "Edit Exam", edit_teacher_exam_path(@exam), class: "btn btn-outline-primary" %>
+    <%= link_to "Back", teacher_exams_path, class: "btn btn-outline-secondary" %>
+  </div>
+</section>
 
-  <div class="card mb-4">
-    <div class="card-body">
-      <p class="card-text">
-        <strong>Title:</strong> <%= @exam.title %><br>
-        <strong>Description:</strong> <%= @exam.description %><br>
-        <strong>Start Time:</strong> <%= @exam.start_time.strftime("%B %d, %Y %I:%M %p") %><br>
-        <strong>End Time:</strong> <%= @exam.end_time.strftime("%B %d, %Y %I:%M %p") %><br>
-        <strong>Approved:</strong> <%= @exam.approved ? "Yes" : "No" %><br>
-        <strong>Cancelled:</strong> <%= @exam.cancelled ? "Yes" : "No" %>
-      </p>
-      <%= link_to 'Edit Exam Details', edit_teacher_exam_path(@exam), class: 'btn btn-primary' %>
-      <%= link_to 'Back to List', teacher_exams_path, class: 'btn btn-secondary ml-2' %>
-    </div>
+<section class="detail-grid">
+  <div class="metric-card">
+    <span>Subject</span>
+    <strong class="metric-text"><%= @exam.subject.presence || "Not set" %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Start</span>
+    <strong class="metric-text"><%= @exam.start_time.strftime("%b %d, %Y %I:%M %p") %></strong>
+  </div>
+  <div class="metric-card">
+    <span>End</span>
+    <strong class="metric-text"><%= @exam.end_time.strftime("%b %d, %Y %I:%M %p") %></strong>
+  </div>
+  <div class="metric-card">
+    <span>Status</span>
+    <strong class="metric-text"><%= @exam.cancelled? ? "Cancelled" : (@exam.approved? ? "Approved" : "Draft") %></strong>
+  </div>
+</section>
+
+<section class="panel-card mt-4">
+  <div class="panel-title">
+    <h3>Questions</h3>
+    <%= link_to "Add Question", new_teacher_exam_question_path(@exam), class: "btn btn-primary btn-sm" if current_user.teacher? %>
   </div>
 
-  <h2 class="mb-4">Questions</h2>
-
-  <div class="card mb-4">
-    <div class="card-body">
-      <% if @exam.questions.any? %>
-        <ul class="list-group list-group-flush">
-          <% @exam.questions.each do |question| %>
-            <li class="list-group-item">
-              <p>
-                <strong>Question:</strong> <%= question.content %>
-              </p>
-              <div class="mb-2">
-                <%= link_to 'Show Question', teacher_exam_question_path(@exam, question), class: 'btn btn-info mb-2' %>
-                <%= button_to 'Delete', teacher_exam_question_path(@exam, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger ml-2' if current_user.teacher? %>
+  <% if @exam.questions.any? %>
+    <div class="question-list">
+      <% @exam.questions.each_with_index do |question, index| %>
+        <article class="question-row">
+          <div>
+            <span class="status-pill status-draft">Question <%= index + 1 %></span>
+            <h4><%= question.content %></h4>
+            <% if question.question_type == "multiple_choice" %>
+              <div class="option-list">
+                <% question.options.each_key do |option| %>
+                  <span><%= option %></span>
+                <% end %>
               </div>
-
-              <% if question.question_type == 'multiple_choice' %>
-                <ul class="list-group mt-2">
-                  <% question.options.each_with_index do |(key, value), index| %>
-                    <li class="list-group-item">
-                      <strong>Option <%= index + 1 %>:</strong> <%= key %>
-                    </li>
-                  <% end %>
-                </ul>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <div class="alert alert-warning">No questions available.</div>
+            <% end %>
+          </div>
+          <div class="question-actions">
+            <%= link_to "Show", teacher_exam_question_path(@exam, question), class: "btn btn-outline-primary btn-sm" %>
+            <%= button_to "Delete", teacher_exam_question_path(@exam, question), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" if current_user.teacher? %>
+          </div>
+        </article>
       <% end %>
     </div>
-  </div>
-
-  <%= link_to 'Add Question', new_teacher_exam_question_path(@exam), class: 'btn btn-success' if current_user.teacher? %>
-  <%= link_to  "Back", teacher_exams_path, class: 'btn btn-secondary' %>
-</div>
+  <% else %>
+    <div class="empty-state">No questions available.</div>
+  <% end %>
+</section>
